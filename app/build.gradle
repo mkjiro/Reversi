@@ -113,6 +113,8 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+
     //Test
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
