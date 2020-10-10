@@ -9,6 +9,6 @@
         android:height="10dp"/>
 
     <!-- 背景色 -->
-    <solid android:color="#888888" />
+    <solid android:color="@color/colorCell" />
 
 </shape>
