@@ -8,13 +8,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import jp.mkjiro.reversi.R
 import kotlinx.android.synthetic.main.cell.view.*
+import timber.log.Timber
+import java.util.*
 
 class BoardRecyclerAdapter(
-    private val list : List<Int>
+    private val list : List<List<Int>>
 ): RecyclerView.Adapter<BoardRecyclerAdapter.MyViewHolder>(){
 
     // リスナー格納変数
-    lateinit var listener: OnItemClickListener
+    private lateinit var listener: OnItemClickListener
+    private val listColumns : Int get() = list[0].size
+    private val listRows : Int get() = list.size
 
     // Viewの初期化
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -29,16 +33,18 @@ class BoardRecyclerAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.text.text = list[position].toString()
+        val row = position/listColumns
+        val col = position%listColumns
+        holder.text.text = list[row][col].toString()
 
         // タップしたとき
         holder.text.setOnClickListener {
-            listener.onItemClickListener(it, position, list[position].toString())
+            listener.onItemClickListener(it, position, list[row][col].toString())
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = list.size
+    override fun getItemCount() = listColumns * listRows
 
     //インターフェースの作成
     interface OnItemClickListener{
