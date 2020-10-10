@@ -31,7 +31,12 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val list = List<Int>(8*8){it}
+        val list = List(8){h ->
+            List(8){w ->
+                Timber.d("row : %s col: %s", h,w)
+                h*8 + w
+            }
+        }
         val adapter = BoardRecyclerAdapter(list)
         val layoutManager = GridLayoutManager(context, 8, GridLayoutManager.VERTICAL,false)
 
