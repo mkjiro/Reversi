@@ -18,7 +18,7 @@ class BoardRecyclerAdapter(
 
     // Viewの初期化
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val text:TextView = view.textView
+        val text:TextView = view.piece_textView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
