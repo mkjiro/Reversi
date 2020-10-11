@@ -3,13 +3,10 @@ package jp.mkjiro.reversi.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import jp.mkjiro.reversi.R
 import kotlinx.android.synthetic.main.cell.view.*
-import timber.log.Timber
-import java.util.*
 
 class BoardRecyclerAdapter(
     private val list : List<List<Int>>
@@ -37,7 +34,6 @@ class BoardRecyclerAdapter(
         val col = position%listColumns
         holder.text.text = list[row][col].toString()
 
-        // タップしたとき
         holder.text.setOnClickListener {
             listener.onItemClickListener(it, position, list[row][col].toString())
         }
