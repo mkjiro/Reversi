@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import jp.mkjiro.reversi.R
@@ -18,6 +19,8 @@ import timber.log.Timber
 class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
     private lateinit var binding: FragmentReversiBinding
+    private val white = R.drawable.piece_white_style
+    private val black = R.drawable.piece_black_style
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,15 +34,9 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val list = List(8){h ->
-            List(8){w ->
-                Timber.d("row : %s col: %s", h,w)
-                h*8 + w
-            }
-        }
-        val adapter = BoardRecyclerAdapter(list)
         val layoutManager = GridLayoutManager(context, 8, GridLayoutManager.VERTICAL,false)
 
+        val adapter = BoardRecyclerAdapter(viewModel.list)
         boardRecyclerView.layoutManager = layoutManager
         boardRecyclerView.setHasFixedSize(true)
         boardRecyclerView.adapter = adapter
@@ -49,12 +46,36 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
                 view.piece_textView.background = ResourcesCompat.getDrawable(resources,R.drawable.piece_black_style,null)
                 Timber.d("%s",view.piece_textView.text)
+                viewModel.test()
             }
         })
 
         back_button.setOnClickListener {
             viewModel.liveEvent.emitEvent(ReversiEvents.ToHome)
         }
+
+        viewModel.reverseLiveData.observe(
+            viewLifecycleOwner,
+            Observer{
+                val turnColor = if(viewModel.isBlack){
+                        black
+                    }else{
+                        white
+                    }
+
+                it.forEach {pair ->
+                    val h = pair.first
+                    val w = pair.second
+                    Timber.d("%s %s", h,w)
+                    boardRecyclerView.findViewHolderForAdapterPosition(h * 8 + w)?.let {holder ->
+                        if(holder is BoardRecyclerAdapter.MyViewHolder){
+                            holder.text.piece_textView.background = ResourcesCompat.getDrawable(resources,turnColor,null)
+    //                            holder.text.text = "9999999"
+                        }
+                    }
+                }
+            }
+        )
     }
 
     override fun onLiveEventReceive(event: ReversiEvents) {
