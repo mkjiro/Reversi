@@ -36,7 +36,7 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
         val layoutManager = GridLayoutManager(context, 8, GridLayoutManager.VERTICAL,false)
 
-        val adapter = BoardRecyclerAdapter(viewModel.list)
+        val adapter = BoardRecyclerAdapter(viewModel.array)
         boardRecyclerView.layoutManager = layoutManager
         boardRecyclerView.setHasFixedSize(true)
         boardRecyclerView.adapter = adapter
@@ -46,7 +46,9 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
                 view.piece_textView.background = ResourcesCompat.getDrawable(resources,R.drawable.piece_black_style,null)
                 Timber.d("%s",view.piece_textView.text)
-                viewModel.test()
+//                viewModel.test()
+                viewModel.array[0][0] = 9999999
+                adapter.notifyItemChanged(0)
             }
         })
 

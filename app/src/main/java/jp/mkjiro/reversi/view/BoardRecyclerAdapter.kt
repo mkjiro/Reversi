@@ -9,13 +9,13 @@ import jp.mkjiro.reversi.R
 import kotlinx.android.synthetic.main.cell.view.*
 
 class BoardRecyclerAdapter(
-    private val list : List<List<Int>>
+    var array : Array<Array<Int>>
 ): RecyclerView.Adapter<BoardRecyclerAdapter.MyViewHolder>(){
 
     // リスナー格納変数
     private lateinit var listener: OnItemClickListener
-    private val listColumns : Int get() = list[0].size
-    private val listRows : Int get() = list.size
+    private val arrayColumns : Int get() = array[0].size
+    private val arrayRows : Int get() = array.size
 
     // Viewの初期化
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
@@ -27,20 +27,24 @@ class BoardRecyclerAdapter(
         return MyViewHolder(view)
     }
 
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int, payloads: MutableList<Any>) {
+        super.onBindViewHolder(holder, position, payloads)
+    }
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        val row = position/listColumns
-        val col = position%listColumns
-        holder.text.text = list[row][col].toString()
+        val row = position/arrayColumns
+        val col = position%arrayColumns
+        holder.text.text = array[row][col].toString()
 
         holder.text.setOnClickListener {
-            listener.onItemClickListener(it, position, list[row][col].toString())
+            listener.onItemClickListener(it, position, array[row][col].toString())
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = listColumns * listRows
+    override fun getItemCount() = arrayColumns * arrayRows
 
     //インターフェースの作成
     interface OnItemClickListener{
