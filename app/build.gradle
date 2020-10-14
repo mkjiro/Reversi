@@ -21,8 +21,6 @@ android {
 
         def localProperty = new Properties()
         localProperty.load(project.rootProject.file('local.properties').newDataInputStream())
-        buildConfigField("String","GOOGLE_URL",localProperty.getProperty("google.url"))
-        buildConfigField("String","GOOGLE_PATH",localProperty.getProperty("google.path"))
     }
 
     buildTypes {
