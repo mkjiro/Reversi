@@ -24,7 +24,6 @@
         android:id="@+id/piece_textView"
         android:layout_width="40sp"
         android:layout_height="40sp"
-        android:background="@drawable/piece_style"
         android:text="a"
         android:gravity="center"
         android:textSize="20sp"

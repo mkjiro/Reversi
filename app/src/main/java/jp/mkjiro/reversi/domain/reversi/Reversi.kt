@@ -1,6 +1,7 @@
 package jp.mkjiro.reversi.domain.reversi
 
 import jp.mkjiro.reversi.data.reversi.*
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,10 +40,15 @@ class ReversiImpl @Inject constructor(
 
     override fun putPiece(coordinate: Coordinate) {
         board.putPiece(coordinate,turnPlayer.piece)
+        ReversiLogic.getOverturnedPieces(coordinate,turnPlayer,board)
+            .map {
+                Timber.d("%s %s",it.y,it.x)
+                board.putPiece(it,turnPlayer.piece)
+            }
     }
 
     override fun getCellToPutPiece(): Array<Coordinate> {
-        TODO("Not yet implemented")
+        return ReversiLogic.getCellToPutPiece(turnPlayer,board)
     }
 
     override fun getTurnPlayerName(): String {

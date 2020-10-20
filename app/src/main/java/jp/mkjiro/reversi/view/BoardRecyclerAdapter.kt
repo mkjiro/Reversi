@@ -49,7 +49,7 @@ class BoardRecyclerAdapter(
         holder.text.background = when(board.cells[row][col].color){
             Color.WHITE -> ResourcesCompat.getDrawable(resources,white,null)
             Color.BLACK -> ResourcesCompat.getDrawable(resources,black,null)
-            else -> ResourcesCompat.getDrawable(resources,green,null)
+            else -> null
         }
 
         holder.text.setOnClickListener {
