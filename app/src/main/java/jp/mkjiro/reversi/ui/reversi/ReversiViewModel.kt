@@ -17,13 +17,6 @@ class ReversiViewModel @Inject constructor(
 
     var isBlack = true
 
-    val array = Array(8){h ->
-        Array(8){w ->
-            Timber.d("row : %s col: %s", h,w)
-            h*8 + w
-        }
-    }
-
     private val _reverseLiveData = MutableLiveData<Array<Pair<Int,Int>>>()
     val reverseLiveData : LiveData<Array<Pair<Int,Int>>>
         get() = _reverseLiveData
