@@ -1,9 +1,6 @@
 package jp.mkjiro.reversi.domain.reversi
 
-import jp.mkjiro.reversi.data.reversi.Board
-import jp.mkjiro.reversi.data.reversi.Color
-import jp.mkjiro.reversi.data.reversi.Coordinate
-import jp.mkjiro.reversi.data.reversi.Player
+import jp.mkjiro.reversi.data.reversi.*
 
 
 data class Direction(
@@ -18,8 +15,8 @@ object ReversiLogic{
     ):Array<Coordinate>{
         var cells = arrayOf<Coordinate>()
         board.cells.mapIndexed { y, arrayOfPieces ->
-            arrayOfPieces.mapIndexed{x, piece ->
-                if(piece.color == Color.NONE){
+            arrayOfPieces.mapIndexed{x, cell ->
+                if(cell.piece.color == PieceColor.NONE){
                     cells += getOverturnedPieces(Coordinate(y,x),player,board)
                 }
             }
@@ -60,9 +57,9 @@ object ReversiLogic{
         var y = newPos.y + dir.y
         var x = newPos.x + dir.x
         loop@ while(isRange(y,x,board)){
-            when(board.cells[y][x].color){
+            when(board.cells[y][x].piece.color){
                 player.piece.color -> break@loop
-                Color.NONE -> return arrayOf()
+                PieceColor.NONE -> return arrayOf()
                 else -> cells += Coordinate(y,x)
             }
             y+=dir.y

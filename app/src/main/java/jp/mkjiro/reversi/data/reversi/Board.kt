@@ -4,13 +4,16 @@ class Board(
     columns:Int = 8,
     rows:Int = 8
 ){
-    var cells:Array<Array<Piece>> = Array(rows){
+    var cells:Array<Array<Cell>> = Array(rows){
         Array(columns){
-            Piece(Color.NONE)
+            Cell(
+                CellColor.GREEN,
+                Piece(PieceColor.NONE)
+            )
         }
     }
 
     fun putPiece(coordinate: Coordinate,piece: Piece){
-        cells[coordinate.y][coordinate.x] = piece
+        cells[coordinate.y][coordinate.x].piece = piece
     }
 }

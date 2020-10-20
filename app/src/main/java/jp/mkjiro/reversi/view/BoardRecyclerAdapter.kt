@@ -9,7 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import jp.mkjiro.reversi.R
 import jp.mkjiro.reversi.data.reversi.Board
-import jp.mkjiro.reversi.data.reversi.Color
+import jp.mkjiro.reversi.data.reversi.PieceColor
 import kotlinx.android.synthetic.main.cell.view.*
 
 class BoardRecyclerAdapter(
@@ -36,24 +36,20 @@ class BoardRecyclerAdapter(
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int, payloads: MutableList<Any>) {
-        super.onBindViewHolder(holder, position, payloads)
-    }
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         val row = position/arrayColumns
         val col = position%arrayColumns
-//        holder.text.text = board.cells[row][col].toString()
-        holder.text.background = when(board.cells[row][col].color){
-            Color.WHITE -> ResourcesCompat.getDrawable(resources,white,null)
-            Color.BLACK -> ResourcesCompat.getDrawable(resources,black,null)
-            else -> null
-        }
 
         holder.text.setOnClickListener {
             listener.onItemClickListener(it, position, board.cells[row][col].toString())
+        }
+        //        holder.text.text = board.cells[row][col].toString()
+        holder.text.background = when(board.cells[row][col].piece.color){
+            PieceColor.WHITE -> ResourcesCompat.getDrawable(resources,white,null)
+            PieceColor.BLACK -> ResourcesCompat.getDrawable(resources,black,null)
+            else -> null
         }
     }
 
