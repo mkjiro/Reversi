@@ -9,6 +9,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import jp.mkjiro.reversi.R
 import jp.mkjiro.reversi.data.reversi.Board
+import jp.mkjiro.reversi.data.reversi.Cell
+import jp.mkjiro.reversi.data.reversi.CellColor
 import jp.mkjiro.reversi.data.reversi.PieceColor
 import kotlinx.android.synthetic.main.cell.view.*
 
@@ -26,9 +28,13 @@ class BoardRecyclerAdapter(
     private val black = R.drawable.piece_black_style
     private val green = R.drawable.piece_style
 
+    private val cellColorGreen = R.drawable.cell_style_green
+    private val cellColorRed = R.drawable.cell_style_red
+
     // Viewの初期化
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val text:TextView = view.piece_textView
+        val piece:TextView = view.piece_textView
+        val cell:TextView = view.cell_textView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -42,13 +48,19 @@ class BoardRecyclerAdapter(
         val row = position/arrayColumns
         val col = position%arrayColumns
 
-        holder.text.setOnClickListener {
+        holder.piece.setOnClickListener {
             listener.onItemClickListener(it, position, board.cells[row][col].toString())
         }
         //        holder.text.text = board.cells[row][col].toString()
-        holder.text.background = when(board.cells[row][col].piece.color){
+        holder.piece.background = when(board.cells[row][col].piece.color){
             PieceColor.WHITE -> ResourcesCompat.getDrawable(resources,white,null)
             PieceColor.BLACK -> ResourcesCompat.getDrawable(resources,black,null)
+            else -> null
+        }
+
+        holder.cell.background = when(board.cells[row][col].color){
+            CellColor.GREEN -> ResourcesCompat.getDrawable(resources,cellColorGreen,null)
+            CellColor.RED -> ResourcesCompat.getDrawable(resources,cellColorRed,null)
             else -> null
         }
     }

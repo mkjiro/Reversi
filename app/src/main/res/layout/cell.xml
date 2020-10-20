@@ -6,7 +6,7 @@
     android:layout_height="55sp">
 
     <TextView
-        android:id="@+id/board_textView"
+        android:id="@+id/cell_textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/cell_style"
@@ -28,7 +28,7 @@
         android:gravity="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/board_textView"
+        app:layout_constraintEnd_toEndOf="@+id/cell_textView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

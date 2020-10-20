@@ -68,7 +68,7 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
                     val w = pair.second
                     boardRecyclerView.findViewHolderForAdapterPosition(h * 8 + w)?.let {holder ->
                         if(holder is BoardRecyclerAdapter.MyViewHolder){
-                            holder.text.piece_textView.background = ResourcesCompat.getDrawable(resources,turnColor,null)
+                            holder.cell.piece_textView.background = ResourcesCompat.getDrawable(resources,turnColor,null)
     //                            holder.text.text = "9999999"
                         }
                     }

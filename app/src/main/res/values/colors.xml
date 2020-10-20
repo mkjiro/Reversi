@@ -6,6 +6,7 @@
 
     <color name="colorBorderCell">#ffffff</color>
     <color name="colorCell">#4db56a</color>
+    <color name="colorRedCell">#ff5555</color>
     <color name="colorWhitePiece">#ffffff</color>
     <color name="colorBlackPiece">#000000</color>
 
