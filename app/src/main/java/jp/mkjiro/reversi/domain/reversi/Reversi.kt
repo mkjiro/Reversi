@@ -8,7 +8,7 @@ import javax.inject.Singleton
 interface Reversi{
     fun reset()
     fun putPiece(coordinate: Coordinate)
-    fun getCellToPutPiece():Array<Coordinate>
+    fun checkCellToPutPiece()
     fun getTurnPlayerName():String
     fun getWinnerName():String
     fun getBoard():Board
@@ -42,13 +42,18 @@ class ReversiImpl @Inject constructor(
         board.putPiece(coordinate,turnPlayer.piece)
         ReversiLogic.getOverturnedPieces(coordinate,turnPlayer,board)
             .map {
-                Timber.d("%s %s",it.y,it.x)
                 board.putPiece(it,turnPlayer.piece)
             }
+        checkCellToPutPiece()
     }
 
-    override fun getCellToPutPiece(): Array<Coordinate> {
-        return ReversiLogic.getCellToPutPiece(turnPlayer,board)
+    override fun checkCellToPutPiece(){
+        board.resetCellColor()
+        ReversiLogic.getCellToPutPiece(turnPlayer,board)
+            .map {
+                Timber.d("%s",it)
+                board.paintCell(it,CellColor.RED)
+            }
     }
 
     override fun getTurnPlayerName(): String {

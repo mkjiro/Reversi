@@ -17,7 +17,8 @@ object ReversiLogic{
         board.cells.mapIndexed { y, arrayOfPieces ->
             arrayOfPieces.mapIndexed{x, cell ->
                 if(cell.piece.color == PieceColor.NONE){
-                    cells += getOverturnedPieces(Coordinate(y,x),player,board)
+                    if(getOverturnedPieces(Coordinate(y, x), player, board).isNotEmpty())
+                        cells += Coordinate(y,x)
                 }
             }
         }

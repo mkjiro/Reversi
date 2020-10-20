@@ -16,4 +16,16 @@ class Board(
     fun putPiece(coordinate: Coordinate,piece: Piece){
         cells[coordinate.y][coordinate.x].piece = piece
     }
+
+    fun paintCell(coordinate: Coordinate, cellColor: CellColor){
+        cells[coordinate.y][coordinate.x].color = cellColor
+    }
+
+    fun resetCellColor(){
+        cells.forEach {
+            it.forEach {
+                it.color = CellColor.GREEN
+            }
+        }
+    }
 }

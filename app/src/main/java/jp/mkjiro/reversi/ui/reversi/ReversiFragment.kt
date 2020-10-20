@@ -45,7 +45,6 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
         adapter.setOnItemClickListener(object:BoardRecyclerAdapter.OnItemClickListener{
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
 //                view.piece_textView.background = ResourcesCompat.getDrawable(resources,R.drawable.piece_black_style,null)
-                Timber.d("%s",view.piece_textView.text)
                 viewModel.putPiece(position)
                 adapter.notifyDataSetChanged()
             }
@@ -67,7 +66,6 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
                 it.forEach {pair ->
                     val h = pair.first
                     val w = pair.second
-                    Timber.d("%s %s", h,w)
                     boardRecyclerView.findViewHolderForAdapterPosition(h * 8 + w)?.let {holder ->
                         if(holder is BoardRecyclerAdapter.MyViewHolder){
                             holder.text.piece_textView.background = ResourcesCompat.getDrawable(resources,turnColor,null)
