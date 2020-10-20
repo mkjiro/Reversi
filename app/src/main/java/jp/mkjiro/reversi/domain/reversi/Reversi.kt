@@ -19,8 +19,8 @@ class ReversiImpl @Inject constructor(
 ):Reversi{
     private var board : Board = Board(8,8)
     private var players = Array(2){
-        Player(Piece(Color.BLACK))
-        Player(Piece(Color.WHITE))
+        Player(Piece(PieceColor.BLACK))
+        Player(Piece(PieceColor.WHITE))
     }
     private var turnPlayer:Player = players[0]
 
@@ -32,10 +32,10 @@ class ReversiImpl @Inject constructor(
         board = Board(8,8)
         turnPlayer = players[0]
 
-        board.putPiece(Coordinate(3,3), Piece(Color.BLACK))
-        board.putPiece(Coordinate(4,4), Piece(Color.BLACK))
-        board.putPiece(Coordinate(3,4), Piece(Color.WHITE))
-        board.putPiece(Coordinate(4,3), Piece(Color.WHITE))
+        board.putPiece(Coordinate(3,3), Piece(PieceColor.BLACK))
+        board.putPiece(Coordinate(4,4), Piece(PieceColor.BLACK))
+        board.putPiece(Coordinate(3,4), Piece(PieceColor.WHITE))
+        board.putPiece(Coordinate(4,3), Piece(PieceColor.WHITE))
     }
 
     override fun putPiece(coordinate: Coordinate) {

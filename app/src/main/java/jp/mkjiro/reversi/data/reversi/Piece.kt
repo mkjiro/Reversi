@@ -1,10 +1,10 @@
 package jp.mkjiro.reversi.data.reversi
 
 data class Piece(
-    var color : Color = Color.NONE
+    var color : PieceColor = PieceColor.NONE
 )
 
-enum class Color{
+enum class PieceColor{
     NONE,
     BLACK,
     WHITE
