@@ -17,6 +17,12 @@ class ReversiViewModel @Inject constructor(
 
     var isBlack = true
 
+    private val rows:Int
+        get() = reversi.getBoard().cells.size
+    private val columns:Int
+        get() = reversi.getBoard().cells[0].size
+
+
     private val _reverseLiveData = MutableLiveData<Array<Pair<Int,Int>>>()
     val reverseLiveData : LiveData<Array<Pair<Int,Int>>>
         get() = _reverseLiveData
@@ -28,7 +34,7 @@ class ReversiViewModel @Inject constructor(
     }
 
     fun putPiece(position: Int){
-        var coordinate = Coordinate(position/8,position%8)
+        var coordinate = Coordinate(position/rows,position%columns)
         reversi.putPiece(coordinate)
     }
 }

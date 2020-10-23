@@ -17,7 +17,10 @@ interface Reversi{
 @Singleton
 class ReversiImpl @Inject constructor(
 ):Reversi{
-    private var board : Board = Board(8,8)
+    private val columns = 8
+    private val rows = 8
+
+    private var board : Board = Board(columns,rows)
     private var players = Array(2){
         Player(Piece(PieceColor.BLACK))
         Player(Piece(PieceColor.WHITE))
@@ -29,7 +32,7 @@ class ReversiImpl @Inject constructor(
     }
 
     override fun reset() {
-        board = Board(8,8)
+        board = Board(columns,rows)
         turnPlayer = players[0]
 
         board.putPiece(Coordinate(3,3), Piece(PieceColor.BLACK))
