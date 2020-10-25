@@ -37,6 +37,7 @@ class ReversiImpl @Inject constructor(
     private val playerName : BehaviorSubject<String> by lazy{
         BehaviorSubject.create<String>()
     }
+    private var cellsToPutPiece : Array<Coordinate> = arrayOf()
 
     init {
         reset()
@@ -58,6 +59,8 @@ class ReversiImpl @Inject constructor(
     }
 
     override fun putPiece(coordinate: Coordinate) {
+        //駒が置ける場所かチェック
+        if(!cellsToPutPiece.contains(coordinate))return //置けない場所
         //ボードに駒を置く
         board.putPiece(coordinate,turnPlayer.piece)
         //ひっくり返す
@@ -88,6 +91,7 @@ class ReversiImpl @Inject constructor(
                 Timber.d("%s",it)
                 board.paintCell(it,CellColor.RED)
             }
+            cellsToPutPiece = cells
         }
         return cells
     }
