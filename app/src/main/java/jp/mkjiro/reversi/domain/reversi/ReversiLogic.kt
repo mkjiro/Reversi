@@ -1,6 +1,7 @@
 package jp.mkjiro.reversi.domain.reversi
 
 import jp.mkjiro.reversi.data.reversi.*
+import timber.log.Timber
 
 
 data class Direction(
@@ -41,7 +42,33 @@ object ReversiLogic{
     }
 
     fun getWinner(board: Board, players: Array<Player>):Player{
-        return players[0]
+        var voteArray = Array(players.size){0}
+        board.cells.map {
+            it.map { cell ->
+                players.forEachIndexed { index, player ->
+                    if(player.piece == cell.piece){
+                        voteArray[index]++
+                    }
+                }
+            }
+        }
+        var indexOfWinner = -1
+        var maxVote = -1
+        voteArray.forEachIndexed { index, vote ->
+            Timber.d("player name : %s , vote : %s", players[index],voteArray[index])
+            if(maxVote == vote){
+                indexOfWinner = -1
+            }else if(maxVote < vote){
+                indexOfWinner = index
+                maxVote = vote
+            }
+        }
+
+        return if(indexOfWinner == -1){
+            Player("Draw", Piece())
+        }else{
+            players[indexOfWinner]
+        }
     }
 
     private fun isRange(y: Int, x: Int,board: Board):Boolean{
