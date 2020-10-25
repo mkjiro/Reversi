@@ -28,6 +28,10 @@ class ReversiViewModel @Inject constructor(
         PublishProcessor.create<String>()
     }
 
+    val winnerPlayerName : PublishProcessor<String> by lazy{
+        PublishProcessor.create<String>()
+    }
+
     private val _reverseLiveData = MutableLiveData<Array<Pair<Int,Int>>>()
     val reverseLiveData : LiveData<Array<Pair<Int,Int>>>
         get() = _reverseLiveData
@@ -37,6 +41,11 @@ class ReversiViewModel @Inject constructor(
         reversi.getTurnPlayerName().subscribe{
             val shownName = "$it's Turn"
             turnPlayerName.onNext(shownName)
+        }.let(disposables::add)
+
+        reversi.getWinnerName().subscribe {
+            val showName = "$it is Winner !!!"
+            winnerPlayerName.onNext(showName)
         }.let(disposables::add)
     }
 

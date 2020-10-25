@@ -1,5 +1,6 @@
 package jp.mkjiro.reversi.domain.reversi
 
+import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.BehaviorSubject
 import jp.mkjiro.reversi.data.reversi.*
 import timber.log.Timber
@@ -11,7 +12,7 @@ interface Reversi{
     fun putPiece(coordinate: Coordinate)
     fun checkCellToPutPiece()
     fun getTurnPlayerName():BehaviorSubject<String>
-    fun getWinnerName():String
+    fun getWinnerName():PublishProcessor<String>
     fun getBoard():Board
 }
 
@@ -36,6 +37,9 @@ class ReversiImpl @Inject constructor(
     private var turnPlayer:Player = players[turnPlayerIndex]
     private val playerName : BehaviorSubject<String> by lazy{
         BehaviorSubject.create<String>()
+    }
+    private val winnerPlayerName : PublishProcessor<String> by lazy{
+        PublishProcessor.create<String>()
     }
     private var cellsToPutPiece : Array<Coordinate> = arrayOf()
 
@@ -77,11 +81,17 @@ class ReversiImpl @Inject constructor(
         if(paintCellsToPuPiece().isEmpty()){
             //ターンプレイヤーを変更
             turnPlayer = players[++turnPlayerIndex%players.size]
-            if(paintCellsToPuPiece().isEmpty()){
+            if(paintCellsToPuPiece().isEmpty()) {
                 //ゲーム終了
+                winnerPlayerName.onNext(
+                    ReversiLogic.getWinner(board, players).name
+                )
+            }else{
+                playerName.onNext(turnPlayer.name)
             }
+        }else{
+            playerName.onNext(turnPlayer.name)
         }
-        playerName.onNext(turnPlayer.name)
     }
 
     private fun paintCellsToPuPiece():Array<Coordinate>{
@@ -109,8 +119,8 @@ class ReversiImpl @Inject constructor(
         return playerName
     }
 
-    override fun getWinnerName(): String {
-        TODO("Not yet implemented")
+    override fun getWinnerName(): PublishProcessor<String> {
+        return winnerPlayerName
     }
 
     override fun getBoard():Board{

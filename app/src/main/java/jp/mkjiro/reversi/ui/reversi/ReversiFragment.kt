@@ -63,6 +63,12 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
                 turnPlayerName_text.text = it
             }.let(startDisposables::add)
 
+        viewModel.winnerPlayerName
+            .onBackpressureLatest()
+            .subscribe{
+                turnPlayerName_text.text = it
+            }.let(startDisposables::add)
+
         viewModel.reverseLiveData.observe(
             viewLifecycleOwner,
             Observer{
