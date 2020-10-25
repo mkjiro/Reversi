@@ -53,6 +53,7 @@ class ReversiImpl @Inject constructor(
         board.putPiece(Coordinate(3,4), Piece(PieceColor.WHITE))
         board.putPiece(Coordinate(4,3), Piece(PieceColor.WHITE))
 
+        paintCellsToPuPiece()
         playerName.onNext(turnPlayer.name)
     }
 
@@ -70,26 +71,25 @@ class ReversiImpl @Inject constructor(
         //セルの色をリセット
         board.resetCellColor()
         //駒が置けるかチェック
-        val cella = ReversiLogic.getCellToPutPiece(turnPlayer,board)
-        if(cella.isEmpty()){
+        if(paintCellsToPuPiece().isEmpty()){
             //ターンプレイヤーを変更
             turnPlayer = players[++turnPlayerIndex%players.size]
-            val cellb = ReversiLogic.getCellToPutPiece(turnPlayer,board)
-            if(cellb.isEmpty()){
+            if(paintCellsToPuPiece().isEmpty()){
                 //ゲーム終了
-            }else{
-                cella.map {
-                    Timber.d("%s",it)
-                    board.paintCell(it,CellColor.RED)
-                }
             }
-        }else{
-            cella.map {
+        }
+        playerName.onNext(turnPlayer.name)
+    }
+
+    private fun paintCellsToPuPiece():Array<Coordinate>{
+        val cells = ReversiLogic.getCellToPutPiece(turnPlayer,board)
+        if(cells.isNotEmpty()){
+            cells.map {
                 Timber.d("%s",it)
                 board.paintCell(it,CellColor.RED)
             }
         }
-        playerName.onNext(turnPlayer.name)
+        return cells
     }
 
     override fun checkCellToPutPiece(){
