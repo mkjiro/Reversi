@@ -66,6 +66,9 @@ object ReversiLogic{
             y+=dir.y
             x+=dir.x
         }
+        if(!isRange(y,x,board)){
+            return arrayOf()
+        }
 
         return cells
     }
