@@ -8,6 +8,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import io.reactivex.disposables.CompositeDisposable
 import jp.mkjiro.reversi.R
 import jp.mkjiro.reversi.base.BaseFragment
 import jp.mkjiro.reversi.databinding.FragmentReversiBinding
@@ -21,6 +22,8 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     private lateinit var binding: FragmentReversiBinding
     private val white = R.drawable.piece_white_style
     private val black = R.drawable.piece_black_style
+
+    private val startDisposables = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +57,12 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
             viewModel.liveEvent.emitEvent(ReversiEvents.ToHome)
         }
 
+        viewModel.turnPlayerName
+            .onBackpressureLatest()
+            .subscribe{
+                turnPlayerName_text.text = it
+            }.let(startDisposables::add)
+
         viewModel.reverseLiveData.observe(
             viewLifecycleOwner,
             Observer{
@@ -75,6 +84,11 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
                 }
             }
         )
+    }
+
+    override fun onPause() {
+        startDisposables.clear()
+        super.onPause()
     }
 
     override fun onLiveEventReceive(event: ReversiEvents) {
