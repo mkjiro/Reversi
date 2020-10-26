@@ -45,7 +45,6 @@ class ReversiImpl @Inject constructor(
 
     init {
         reset()
-
     }
 
     override fun reset() {
