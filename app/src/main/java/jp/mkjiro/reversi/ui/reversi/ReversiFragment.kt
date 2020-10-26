@@ -37,7 +37,7 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = GridLayoutManager(context, 8, GridLayoutManager.VERTICAL,false)
+        val layoutManager = GridLayoutManager(context, viewModel.columns, GridLayoutManager.VERTICAL,false)
 
         val adapter = BoardRecyclerAdapter(viewModel.reversi.getBoard(),resources)
         boardRecyclerView.layoutManager = layoutManager

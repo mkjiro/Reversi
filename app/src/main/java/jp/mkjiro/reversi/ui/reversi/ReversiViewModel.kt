@@ -19,9 +19,9 @@ class ReversiViewModel @Inject constructor(
 
     var isBlack = true
 
-    private val rows:Int
+    val rows:Int
         get() = reversi.getBoard().cells.size
-    private val columns:Int
+    val columns:Int
         get() = reversi.getBoard().cells[0].size
 
     val turnPlayerName : PublishProcessor<String> by lazy{
