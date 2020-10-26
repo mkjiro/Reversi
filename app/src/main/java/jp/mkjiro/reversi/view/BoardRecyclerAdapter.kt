@@ -13,6 +13,7 @@ import jp.mkjiro.reversi.data.reversi.Cell
 import jp.mkjiro.reversi.data.reversi.CellColor
 import jp.mkjiro.reversi.data.reversi.PieceColor
 import kotlinx.android.synthetic.main.cell.view.*
+import timber.log.Timber
 
 class BoardRecyclerAdapter(
     private var board : Board,
@@ -47,6 +48,8 @@ class BoardRecyclerAdapter(
         // - replace the contents of the view with that element
         val row = position/arrayColumns
         val col = position%arrayColumns
+
+//        holder.cell.text = "$row : $col"
 
         holder.piece.setOnClickListener {
             listener.onItemClickListener(it, position, board.cells[row][col].toString())

@@ -56,7 +56,7 @@ class ReversiViewModel @Inject constructor(
     }
 
     fun putPiece(position: Int){
-        var coordinate = Coordinate(position/rows,position%columns)
+        var coordinate = Coordinate(position/columns,position%columns)
         reversi.putPiece(coordinate)
     }
 }

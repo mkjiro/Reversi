@@ -19,7 +19,7 @@ interface Reversi{
 @Singleton
 class ReversiImpl @Inject constructor(
 ):Reversi{
-    private val columns = 6
+    private val columns = 8
     private val rows = 8
 
     private var board : Board = Board(columns,rows)
@@ -62,6 +62,7 @@ class ReversiImpl @Inject constructor(
     }
 
     override fun putPiece(coordinate: Coordinate) {
+        Timber.d("coordinate to put : %s", coordinate)
         //駒が置ける場所かチェック
         if(!cellsToPutPiece.contains(coordinate))return //置けない場所
         //ボードに駒を置く
