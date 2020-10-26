@@ -19,7 +19,7 @@ interface Reversi{
 @Singleton
 class ReversiImpl @Inject constructor(
 ):Reversi{
-    private val columns = 8
+    private val columns = 6
     private val rows = 8
 
     private var board : Board = Board(columns,rows)
