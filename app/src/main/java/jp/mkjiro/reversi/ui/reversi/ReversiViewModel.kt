@@ -17,8 +17,6 @@ class ReversiViewModel @Inject constructor(
     override val liveEvent =
         EventLiveData<ReversiEvents>()
 
-    var isBlack = true
-
     val rows:Int
         get() = reversi.getBoard().cells.size
     val columns:Int
@@ -32,10 +30,6 @@ class ReversiViewModel @Inject constructor(
         PublishProcessor.create<String>()
     }
 
-    private val _reverseLiveData = MutableLiveData<Array<Pair<Int,Int>>>()
-    val reverseLiveData : LiveData<Array<Pair<Int,Int>>>
-        get() = _reverseLiveData
-
     override fun onStartWithDisposables(disposables: CompositeDisposable) {
         super.onStartWithDisposables(disposables)
         reversi.getTurnPlayerName().subscribe{
@@ -47,12 +41,8 @@ class ReversiViewModel @Inject constructor(
             val showName = "$it is Winner !!!"
             winnerPlayerName.onNext(showName)
         }.let(disposables::add)
-    }
 
-    fun test(){
-        _reverseLiveData.value = Array(4){
-            Pair(it,it)
-        }
+
     }
 
     fun putPiece(position: Int){

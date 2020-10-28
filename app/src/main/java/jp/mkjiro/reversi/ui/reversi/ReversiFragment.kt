@@ -20,8 +20,6 @@ import timber.log.Timber
 class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
     private lateinit var binding: FragmentReversiBinding
-    private val white = R.drawable.piece_white_style
-    private val black = R.drawable.piece_black_style
 
     private val startDisposables = CompositeDisposable()
 
@@ -68,28 +66,6 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
             .subscribe{
                 turnPlayerName_text.text = it
             }.let(startDisposables::add)
-
-        viewModel.reverseLiveData.observe(
-            viewLifecycleOwner,
-            Observer{
-                val turnColor = if(viewModel.isBlack){
-                        black
-                    }else{
-                        white
-                    }
-
-                it.forEach {pair ->
-                    val h = pair.first
-                    val w = pair.second
-                    boardRecyclerView.findViewHolderForAdapterPosition(h * 8 + w)?.let {holder ->
-                        if(holder is BoardRecyclerAdapter.MyViewHolder){
-                            holder.cell.piece_textView.background = ResourcesCompat.getDrawable(resources,turnColor,null)
-    //                            holder.text.text = "9999999"
-                        }
-                    }
-                }
-            }
-        )
     }
 
     override fun onPause() {
