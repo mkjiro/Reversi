@@ -1,22 +1,20 @@
 package jp.mkjiro.reversi.ui.reversi
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import jp.mkjiro.reversi.base.BaseViewModel
 import jp.mkjiro.reversi.data.reversi.Coordinate
-import jp.mkjiro.reversi.domain.reversi.Reversi
+import jp.mkjiro.reversi.domain.reversi.ReversiFactory
 import jp.mkjiro.reversi.ui.livedata.EventLiveData
-import timber.log.Timber
 import javax.inject.Inject
 
 class ReversiViewModel @Inject constructor(
+    reversiFactory: ReversiFactory
 ) : BaseViewModel<ReversiEvents>() {
     override val liveEvent =
         EventLiveData<ReversiEvents>()
 
-    val reversi = Reversi()
+    val reversi = reversiFactory.create(8,8)
 
     val rows:Int
         get() = reversi.getBoard().cells.size
@@ -42,8 +40,6 @@ class ReversiViewModel @Inject constructor(
             val showName = "$it is Winner !!!"
             winnerPlayerName.onNext(showName)
         }.let(disposables::add)
-
-
     }
 
     fun putPiece(position: Int){
