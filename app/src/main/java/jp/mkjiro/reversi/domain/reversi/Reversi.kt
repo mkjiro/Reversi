@@ -4,23 +4,11 @@ import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.BehaviorSubject
 import jp.mkjiro.reversi.data.reversi.*
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
-interface Reversi{
-    fun reset()
-    fun putPiece(coordinate: Coordinate)
-    fun checkCellToPutPiece()
-    fun getTurnPlayerName():BehaviorSubject<String>
-    fun getWinnerName():PublishProcessor<String>
-    fun getBoard():Board
-}
-
-@Singleton
-class ReversiImpl @Inject constructor(
-):Reversi{
-    private val columns = 8
-    private val rows = 8
+class Reversi(
+    private val columns:Int = 8,
+    private val rows:Int = 8
+){
 
     private var board : Board = Board(columns,rows)
     private var players = arrayOf(
@@ -47,7 +35,7 @@ class ReversiImpl @Inject constructor(
         reset()
     }
 
-    override fun reset() {
+    fun reset() {
         board = Board(columns,rows)
         turnPlayerIndex = 0
         turnPlayer = players[turnPlayerIndex]
@@ -61,7 +49,7 @@ class ReversiImpl @Inject constructor(
         playerName.onNext(turnPlayer.name)
     }
 
-    override fun putPiece(coordinate: Coordinate) {
+    fun putPiece(coordinate: Coordinate) {
         Timber.d("coordinate to put : %s", coordinate)
         //駒が置ける場所かチェック
         if(!cellsToPutPiece.contains(coordinate))return //置けない場所
@@ -106,7 +94,7 @@ class ReversiImpl @Inject constructor(
         return cells
     }
 
-    override fun checkCellToPutPiece(){
+    fun checkCellToPutPiece(){
         board.resetCellColor()
         ReversiLogic.getCellToPutPiece(turnPlayer,board)
             .map {
@@ -115,15 +103,15 @@ class ReversiImpl @Inject constructor(
             }
     }
 
-    override fun getTurnPlayerName(): BehaviorSubject<String> {
+    fun getTurnPlayerName(): BehaviorSubject<String> {
         return playerName
     }
 
-    override fun getWinnerName(): PublishProcessor<String> {
+    fun getWinnerName(): PublishProcessor<String> {
         return winnerPlayerName
     }
 
-    override fun getBoard():Board{
+    fun getBoard():Board{
         return board
     }
 }

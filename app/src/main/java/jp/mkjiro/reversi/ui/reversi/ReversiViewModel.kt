@@ -12,10 +12,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class ReversiViewModel @Inject constructor(
-    var reversi:Reversi
 ) : BaseViewModel<ReversiEvents>() {
     override val liveEvent =
         EventLiveData<ReversiEvents>()
+
+    val reversi = Reversi()
 
     val rows:Int
         get() = reversi.getBoard().cells.size
