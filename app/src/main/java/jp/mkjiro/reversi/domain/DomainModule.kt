@@ -5,7 +5,7 @@ import jp.mkjiro.reversi.domain.reversi.ReversiServiceModule
 
 @Module(
     includes = [
-        ReversiServiceModule::class
+//        ReversiServiceModule::class
     ]
 )
 class DomainModule

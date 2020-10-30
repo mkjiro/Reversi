@@ -5,6 +5,6 @@ import dagger.Module
 
 @Module
 abstract class ReversiServiceModule{
-    @Binds
-    abstract fun bindsReversi(impl:ReversiImpl):Reversi
+//    @Binds
+//    abstract fun bindsReversi(impl:ReversiImpl):Reversi
 }
