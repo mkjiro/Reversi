@@ -6,21 +6,9 @@ import jp.mkjiro.reversi.data.reversi.*
 import timber.log.Timber
 
 class Reversi(
-    private val columns:Int = 8,
-    private val rows:Int = 8
+    private val board: Board,
+    private val players: Array<Player>
 ){
-
-    private var board : Board = Board(columns,rows)
-    private var players = arrayOf(
-        Player(
-            "Black",
-            Piece(PieceColor.BLACK)
-        ),
-        Player(
-            "White",
-            Piece(PieceColor.WHITE)
-        )
-    )
     private var turnPlayerIndex = 0
     private var turnPlayer:Player = players[turnPlayerIndex]
     private val playerName : BehaviorSubject<String> by lazy{
@@ -36,7 +24,6 @@ class Reversi(
     }
 
     fun reset() {
-        board = Board(columns,rows)
         turnPlayerIndex = 0
         turnPlayer = players[turnPlayerIndex]
 
