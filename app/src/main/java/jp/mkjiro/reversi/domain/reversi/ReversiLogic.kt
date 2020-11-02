@@ -41,7 +41,7 @@ object ReversiLogic{
         return cells
     }
 
-    fun getWinner(board: Board, players: Array<Player>):Player{
+    fun getWinnerName(board: Board, players: Array<Player>):String{
         var voteArray = Array(players.size){0}
         board.cells.map {
             it.map { cell ->
@@ -65,9 +65,9 @@ object ReversiLogic{
         }
 
         return if(indexOfWinner == -1){
-            Player("Draw", Piece())
+            "Draw"
         }else{
-            players[indexOfWinner]
+            players[indexOfWinner].name
         }
     }
 

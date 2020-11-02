@@ -1,9 +1,6 @@
 package jp.mkjiro.reversi.domain.reversi
 
-import jp.mkjiro.reversi.data.reversi.Board
-import jp.mkjiro.reversi.data.reversi.Piece
-import jp.mkjiro.reversi.data.reversi.PieceColor
-import jp.mkjiro.reversi.data.reversi.Player
+import jp.mkjiro.reversi.data.reversi.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,11 +19,11 @@ class ReversiFactoryImpl @Inject constructor(
         return Reversi(
             Board(columns,rows),
             arrayOf(
-                Player(
+                Human(
                     "Black",
                     Piece(PieceColor.BLACK)
                 ),
-                Player(
+                Human(
                     "White",
                     Piece(PieceColor.WHITE)
                 )
