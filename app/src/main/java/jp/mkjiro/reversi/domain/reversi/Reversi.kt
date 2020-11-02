@@ -59,7 +59,7 @@ class Reversi(
             if(paintCellsToPuPiece().isEmpty()) {
                 //ゲーム終了
                 winnerPlayerName.onNext(
-                    ReversiLogic.getWinner(board, players).name
+                    ReversiLogic.getWinnerName(board, players)
                 )
             }else{
                 playerName.onNext(turnPlayer.name)
