@@ -81,15 +81,6 @@ class Reversi(
         return cells
     }
 
-    fun checkCellToPutPiece(){
-        board.resetCellColor()
-        ReversiLogic.getCellToPutPiece(turnPlayer,board)
-            .map {
-                Timber.d("%s",it)
-                board.paintCell(it,CellColor.RED)
-            }
-    }
-
     fun getTurnPlayerName(): BehaviorSubject<String> {
         return playerName
     }
