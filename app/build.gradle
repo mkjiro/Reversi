@@ -5,7 +5,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
-
 def applicationName = "Reversi"
 
 android {
@@ -101,22 +100,15 @@ android {
         }
     }
 
-    flavorDimensions 'Templete'
-    productFlavors {
-        free {
-            dimension 'Templete'
-        }
-        paid {
-            dimension 'Templete'
-        }
-    }
-
-
     ktlint {
         version = "0.22.0"
         debug = true
         android = true
         ignoreFailures = true
+    }
+
+    tasks.preBuild {
+        dependsOn(tasks.ktlintFormat)
     }
 }
 
