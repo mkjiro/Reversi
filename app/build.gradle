@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
+
 
 def applicationName = "Reversi"
 
@@ -107,6 +109,14 @@ android {
         paid {
             dimension 'Templete'
         }
+    }
+
+
+    ktlint {
+        version = "0.22.0"
+        debug = true
+        android = true
+        ignoreFailures = true
     }
 }
 
