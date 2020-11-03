@@ -6,7 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-) : BaseViewModel<MainEvents>(){
+) : BaseViewModel<MainEvents>() {
     override val liveEvent =
         EventLiveData<MainEvents>()
 
@@ -17,5 +17,4 @@ class MainViewModel @Inject constructor(
     override fun onStop() {
         super.onStop()
     }
-
 }

@@ -1,6 +1,6 @@
 package jp.mkjiro.reversi.data.reversi
 
 class CPU(
-    name:String,
+    name: String,
     piece: Piece
-):Player(name,piece)
+) : Player(name, piece)

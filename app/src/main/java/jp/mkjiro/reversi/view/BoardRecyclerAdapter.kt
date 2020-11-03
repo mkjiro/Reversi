@@ -9,21 +9,19 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import jp.mkjiro.reversi.R
 import jp.mkjiro.reversi.data.reversi.Board
-import jp.mkjiro.reversi.data.reversi.Cell
 import jp.mkjiro.reversi.data.reversi.CellColor
 import jp.mkjiro.reversi.data.reversi.PieceColor
 import kotlinx.android.synthetic.main.cell.view.*
-import timber.log.Timber
 
 class BoardRecyclerAdapter(
-    private var board : Board,
-    private var resources : Resources
-): RecyclerView.Adapter<BoardRecyclerAdapter.MyViewHolder>(){
+    private var board: Board,
+    private var resources: Resources
+) : RecyclerView.Adapter<BoardRecyclerAdapter.MyViewHolder>() {
 
     // リスナー格納変数
     private lateinit var listener: OnItemClickListener
-    private val arrayColumns : Int get() = board.cells[0].size
-    private val arrayRows : Int get() = board.cells.size
+    private val arrayColumns: Int get() = board.cells[0].size
+    private val arrayRows: Int get() = board.cells.size
 
     private val white = R.drawable.piece_white_style
     private val black = R.drawable.piece_black_style
@@ -33,21 +31,21 @@ class BoardRecyclerAdapter(
     private val cellColorRed = R.drawable.cell_style_red
 
     // Viewの初期化
-    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        val piece:TextView = view.piece_textView
-        val cell:TextView = view.cell_textView
+    class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val piece: TextView = view.piece_textView
+        val cell: TextView = view.cell_textView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cell,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cell, parent, false)
         return MyViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        val row = position/arrayColumns
-        val col = position%arrayColumns
+        val row = position / arrayColumns
+        val col = position % arrayColumns
 
 //        holder.cell.text = "$row : $col"
 
@@ -55,15 +53,15 @@ class BoardRecyclerAdapter(
             listener.onItemClickListener(it, position, board.cells[row][col].toString())
         }
         //        holder.text.text = board.cells[row][col].toString()
-        holder.piece.background = when(board.cells[row][col].piece.color){
-            PieceColor.WHITE -> ResourcesCompat.getDrawable(resources,white,null)
-            PieceColor.BLACK -> ResourcesCompat.getDrawable(resources,black,null)
+        holder.piece.background = when (board.cells[row][col].piece.color) {
+            PieceColor.WHITE -> ResourcesCompat.getDrawable(resources, white, null)
+            PieceColor.BLACK -> ResourcesCompat.getDrawable(resources, black, null)
             else -> null
         }
 
-        holder.cell.background = when(board.cells[row][col].color){
-            CellColor.GREEN -> ResourcesCompat.getDrawable(resources,cellColorGreen,null)
-            CellColor.RED -> ResourcesCompat.getDrawable(resources,cellColorRed,null)
+        holder.cell.background = when (board.cells[row][col].color) {
+            CellColor.GREEN -> ResourcesCompat.getDrawable(resources, cellColorGreen, null)
+            CellColor.RED -> ResourcesCompat.getDrawable(resources, cellColorRed, null)
             else -> null
         }
     }
@@ -72,13 +70,12 @@ class BoardRecyclerAdapter(
     override fun getItemCount() = arrayColumns * arrayRows
 
     //インターフェースの作成
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         fun onItemClickListener(view: View, position: Int, clickedText: String)
     }
 
     // リスナー
-    fun setOnItemClickListener(listener: OnItemClickListener){
+    fun setOnItemClickListener(listener: OnItemClickListener) {
         this.listener = listener
     }
-
 }

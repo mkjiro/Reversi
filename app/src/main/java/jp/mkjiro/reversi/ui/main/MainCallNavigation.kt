@@ -9,5 +9,4 @@ sealed class MainCallNavigation : BaseEvents {
     object CheckPermissions : MainCallNavigation()
     object CallRequest : MainCallNavigation()
     data class AcceptCall(val bundle: Bundle) : MainCallNavigation()
-
 }
