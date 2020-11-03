@@ -36,5 +36,3 @@ abstract class BaseViewModel<Nav : BaseEvents>() :
         }).let(startDisposables::add)
     }
 }
-
-

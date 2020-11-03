@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.CompositeDisposable
@@ -15,7 +13,6 @@ import jp.mkjiro.reversi.databinding.FragmentReversiBinding
 import jp.mkjiro.reversi.view.BoardRecyclerAdapter
 import kotlinx.android.synthetic.main.cell.view.*
 import kotlinx.android.synthetic.main.fragment_reversi.*
-import timber.log.Timber
 
 class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
@@ -24,7 +21,8 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     private val startDisposables = CompositeDisposable()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReversiBinding.inflate(inflater)
@@ -35,15 +33,15 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val layoutManager = GridLayoutManager(context, viewModel.columns, GridLayoutManager.VERTICAL,false)
+        val layoutManager = GridLayoutManager(context, viewModel.columns, GridLayoutManager.VERTICAL, false)
 
-        val adapter = BoardRecyclerAdapter(viewModel.reversi.getBoard(),resources)
+        val adapter = BoardRecyclerAdapter(viewModel.reversi.getBoard(), resources)
         boardRecyclerView.layoutManager = layoutManager
         boardRecyclerView.setHasFixedSize(true)
         boardRecyclerView.adapter = adapter
 
         //インターフェースの実装
-        adapter.setOnItemClickListener(object:BoardRecyclerAdapter.OnItemClickListener{
+        adapter.setOnItemClickListener(object : BoardRecyclerAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
 //                view.piece_textView.background = ResourcesCompat.getDrawable(resources,R.drawable.piece_black_style,null)
                 viewModel.putPiece(position)
@@ -57,13 +55,13 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
         viewModel.turnPlayerName
             .onBackpressureLatest()
-            .subscribe{
+            .subscribe {
                 turnPlayerName_text.text = it
             }.let(startDisposables::add)
 
         viewModel.winnerPlayerName
             .onBackpressureLatest()
-            .subscribe{
+            .subscribe {
                 turnPlayerName_text.text = it
             }.let(startDisposables::add)
     }
@@ -74,7 +72,7 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
     }
 
     override fun onLiveEventReceive(event: ReversiEvents) {
-        when(event){
+        when (event) {
             is ReversiEvents.ToHome -> {
                 findNavController().navigate(R.id.home)
             }

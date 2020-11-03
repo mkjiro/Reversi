@@ -18,7 +18,6 @@ abstract class ReversiModule {
     @ViewModelKey(ReversiViewModel::class)
     abstract fun bindsNextViewModel(viewModel: ReversiViewModel): ViewModel
 
-
     @Module
     companion object {
 

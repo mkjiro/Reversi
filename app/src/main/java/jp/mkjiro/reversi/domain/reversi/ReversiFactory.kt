@@ -4,20 +4,20 @@ import jp.mkjiro.reversi.data.reversi.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-interface ReversiFactory{
-    fun create(columns:Int,rows:Int): Reversi
+interface ReversiFactory {
+    fun create(columns: Int, rows: Int): Reversi
 }
 
 @Singleton
 class ReversiFactoryImpl @Inject constructor(
-):ReversiFactory{
+) : ReversiFactory {
 
     override fun create(
-        columns:Int,
-        rows:Int
+        columns: Int,
+        rows: Int
     ): Reversi {
         return Reversi(
-            Board(columns,rows),
+            Board(columns, rows),
             arrayOf(
                 Human(
                     "Black",

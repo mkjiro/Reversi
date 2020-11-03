@@ -4,14 +4,14 @@ import dagger.Binds
 import dagger.Module
 
 @Module
-abstract class ReversiServiceModule{
+abstract class ReversiServiceModule {
     @Binds
     abstract fun bindsReversiFactory(
-        impl:ReversiFactoryImpl
-    ):ReversiFactory
+        impl: ReversiFactoryImpl
+    ): ReversiFactory
 
     @Binds
     abstract fun bindsReversiRepository(
         impl: ReversiRepositoryImpl
-    ):ReversiRepository
+    ): ReversiRepository
 }

@@ -24,7 +24,6 @@ class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.w("onCreate")
@@ -61,7 +60,6 @@ class MainActivity : BaseActivity() {
     private fun configureNavController() {
         navController = findNavController(R.id.nav_controller)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-
         }
     }
 
@@ -70,5 +68,4 @@ class MainActivity : BaseActivity() {
 //        FirebasePerformance.getInstance().newTrace("main_trace").stop()
         super.onDestroy()
     }
-
 }

@@ -18,7 +18,6 @@ abstract class HomeModule {
     @ViewModelKey(HomeViewModel::class)
     abstract fun bindsHomeViewModel(viewModel: HomeViewModel): ViewModel
 
-
     @Module
     companion object {
 

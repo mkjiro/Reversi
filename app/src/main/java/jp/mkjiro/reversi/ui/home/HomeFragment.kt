@@ -15,7 +15,8 @@ class HomeFragment : BaseFragment<HomeEvents, HomeViewModel>() {
     lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater)
