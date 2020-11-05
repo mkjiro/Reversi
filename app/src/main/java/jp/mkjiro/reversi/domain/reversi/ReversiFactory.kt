@@ -16,8 +16,7 @@ class ReversiFactoryImpl @Inject constructor(
         columns: Int,
         rows: Int
     ): Reversi {
-        return Reversi(
-            Board(columns, rows),
+        var playerManager = PlayerManager(
             arrayOf(
                 Human(
                     "Black",
@@ -28,6 +27,10 @@ class ReversiFactoryImpl @Inject constructor(
                     Piece(PieceColor.WHITE)
                 )
             )
+        )
+        return Reversi(
+            Board(columns, rows),
+            playerManager
         )
     }
 }
