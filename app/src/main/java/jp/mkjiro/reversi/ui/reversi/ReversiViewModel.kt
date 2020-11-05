@@ -14,7 +14,7 @@ class ReversiViewModel @Inject constructor(
     override val liveEvent =
         EventLiveData<ReversiEvents>()
 
-    val reversi = reversiRepository.createVSCPU(8, 8)
+    val reversi = reversiRepository.createRanVSRan(8, 8)
 
     val rows: Int
         get() = reversi.getBoard().cells.size

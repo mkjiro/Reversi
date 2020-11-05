@@ -1,6 +1,7 @@
 package jp.mkjiro.reversi.data.reversi
 
 import jp.mkjiro.reversi.domain.reversi.ReversiLogic
+import java.lang.Thread.sleep
 
 interface Strategy {
     fun getChosen(player: Player, board: Board): Coordinate
@@ -14,6 +15,6 @@ class RandomStrategy : Strategy {
     }
 
     override fun delay(ms: Long) {
-        TODO("Not yet implemented")
+        sleep(ms)
     }
 }
