@@ -7,10 +7,8 @@ import timber.log.Timber
 
 class Reversi(
     private val board: Board,
-    private val players: Array<Player>
+    private val playerManager: PlayerManager
 ) {
-    private var turnPlayerIndex = 0
-    private var turnPlayer: Player = players[turnPlayerIndex]
     private val playerName: BehaviorSubject<String> by lazy {
         BehaviorSubject.create<String>()
     }
@@ -23,17 +21,14 @@ class Reversi(
         reset()
     }
 
-    fun reset() {
-        turnPlayerIndex = 0
-        turnPlayer = players[turnPlayerIndex]
-
+    private fun reset() {
         board.putPiece(Coordinate(3, 3), Piece(PieceColor.BLACK))
         board.putPiece(Coordinate(4, 4), Piece(PieceColor.BLACK))
         board.putPiece(Coordinate(3, 4), Piece(PieceColor.WHITE))
         board.putPiece(Coordinate(4, 3), Piece(PieceColor.WHITE))
 
         paintCellsToPuPiece()
-        playerName.onNext(turnPlayer.name)
+        playerName.onNext(playerManager.turnPlayer.name)
     }
 
     fun putPiece(coordinate: Coordinate) {
@@ -41,36 +36,36 @@ class Reversi(
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
         //ボードに駒を置く
-        board.putPiece(coordinate, turnPlayer.piece)
+        board.putPiece(coordinate, playerManager.turnPlayer.piece)
         //ひっくり返す
-        ReversiLogic.getOverturnedPieces(coordinate, turnPlayer, board)
+        ReversiLogic.getOverturnedPieces(coordinate, playerManager.turnPlayer, board)
             .map {
-                board.putPiece(it, turnPlayer.piece)
+                board.putPiece(it, playerManager.turnPlayer.piece)
             }
         //ターンプレイヤーを変更
-        turnPlayer = players[++turnPlayerIndex % players.size]
-        Timber.d("%s", turnPlayer)
+        playerManager.alternateTurnPlayer()
+        Timber.d("%s", playerManager.turnPlayer)
         //セルの色をリセット
         board.resetCellColor()
         //駒が置けるかチェック
         if (paintCellsToPuPiece().isEmpty()) {
             //ターンプレイヤーを変更
-            turnPlayer = players[++turnPlayerIndex % players.size]
+            playerManager.alternateTurnPlayer()
             if (paintCellsToPuPiece().isEmpty()) {
                 //ゲーム終了
                 winnerPlayerName.onNext(
-                    ReversiLogic.getWinnerName(board, players)
+                    ReversiLogic.getWinnerName(board, playerManager.players)
                 )
             } else {
-                playerName.onNext(turnPlayer.name)
+                playerName.onNext(playerManager.turnPlayer.name)
             }
         } else {
-            playerName.onNext(turnPlayer.name)
+            playerName.onNext(playerManager.turnPlayer.name)
         }
     }
 
     private fun paintCellsToPuPiece(): Array<Coordinate> {
-        val cells = ReversiLogic.getCellToPutPiece(turnPlayer, board)
+        val cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
         if (cells.isNotEmpty()) {
             cells.map {
                 Timber.d("%s", it)
