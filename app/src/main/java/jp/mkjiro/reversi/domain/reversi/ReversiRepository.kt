@@ -5,6 +5,7 @@ import javax.inject.Singleton
 
 interface ReversiRepository {
     fun create(columns: Int, rows: Int): Reversi
+    fun createVSCPU(columns: Int, rows: Int): Reversi
 }
 
 @Singleton
@@ -13,5 +14,9 @@ class ReversiRepositoryImpl @Inject constructor(
 ) : ReversiRepository {
     override fun create(columns: Int, rows: Int): Reversi {
         return reversiFactory.create(columns, rows)
+    }
+
+    override fun createVSCPU(columns: Int, rows: Int): Reversi {
+        return reversiFactory.createVSCPU(columns, rows)
     }
 }

@@ -17,6 +17,8 @@ class Reversi(
     }
     private var cellsToPutPiece: Array<Coordinate> = arrayOf()
 
+    var state = State.INIT
+
     init {
         reset()
     }
@@ -24,14 +26,16 @@ class Reversi(
     private fun reset() {
         board.resetPiece()
         board.resetCellColor()
-        paintCellsToPuPiece()
-        playerName.onNext(playerManager.turnPlayer.name)
+        judePhase()
     }
 
     fun putPiece(coordinate: Coordinate) {
         Timber.d("coordinate to put : %s", coordinate)
+        Timber.d("%s", state)
+        if (state != State.TURN_OF_HUMAN)return
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
+        state = State.PROCESSING
         //ボードに駒を置く
         playerManager.turnPlayer.putPiece(coordinate, board)
         //ひっくり返す
@@ -44,6 +48,10 @@ class Reversi(
         Timber.d("%s", playerManager.turnPlayer)
         //セルの色をリセット
         board.resetCellColor()
+        judePhase()
+    }
+
+    private fun isContinued(): Boolean {
         //駒が置けるかチェック
         if (paintCellsToPuPiece().isEmpty()) {
             //ターンプレイヤーを変更
@@ -53,11 +61,35 @@ class Reversi(
                 winnerPlayerName.onNext(
                     ReversiLogic.getWinnerName(board, playerManager.players)
                 )
+                return false
             } else {
                 playerName.onNext(playerManager.turnPlayer.name)
             }
         } else {
             playerName.onNext(playerManager.turnPlayer.name)
+        }
+        return true
+    }
+
+    private fun processTurnPlayer() {
+        val player = playerManager.turnPlayer
+        if (player is CPU) {
+            state = State.TURN_OF_CPU
+            player.play(board)
+            playerManager.alternateTurnPlayer()
+            //セルの色をリセット
+            board.resetCellColor()
+            judePhase()
+        } else if (player is Human) {
+            state = State.TURN_OF_HUMAN
+        }
+    }
+
+    private fun judePhase() {
+        if (isContinued()) {
+            processTurnPlayer()
+        } else {
+            state = State.FINISH
         }
     }
 
@@ -84,4 +116,12 @@ class Reversi(
     fun getBoard(): Board {
         return board
     }
+}
+
+enum class State {
+    INIT,
+    PROCESSING,
+    TURN_OF_HUMAN,
+    TURN_OF_CPU,
+    FINISH
 }
