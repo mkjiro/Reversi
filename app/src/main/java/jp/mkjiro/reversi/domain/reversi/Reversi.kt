@@ -22,11 +22,8 @@ class Reversi(
     }
 
     private fun reset() {
-        board.putPiece(Coordinate(3, 3), Piece(PieceColor.BLACK))
-        board.putPiece(Coordinate(4, 4), Piece(PieceColor.BLACK))
-        board.putPiece(Coordinate(3, 4), Piece(PieceColor.WHITE))
-        board.putPiece(Coordinate(4, 3), Piece(PieceColor.WHITE))
-
+        board.resetPiece()
+        board.resetCellColor()
         paintCellsToPuPiece()
         playerName.onNext(playerManager.turnPlayer.name)
     }
@@ -36,11 +33,11 @@ class Reversi(
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
         //ボードに駒を置く
-        board.putPiece(coordinate, playerManager.turnPlayer.piece)
+        playerManager.turnPlayer.putPiece(coordinate, board)
         //ひっくり返す
         ReversiLogic.getOverturnedPieces(coordinate, playerManager.turnPlayer, board)
             .map {
-                board.putPiece(it, playerManager.turnPlayer.piece)
+                playerManager.turnPlayer.putPiece(it, board)
             }
         //ターンプレイヤーを変更
         playerManager.alternateTurnPlayer()
