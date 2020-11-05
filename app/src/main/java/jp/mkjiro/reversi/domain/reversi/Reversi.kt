@@ -3,6 +3,7 @@ package jp.mkjiro.reversi.domain.reversi
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.BehaviorSubject
 import jp.mkjiro.reversi.data.reversi.*
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 class Reversi(
@@ -19,17 +20,13 @@ class Reversi(
 
     var state = State.INIT
 
-    init {
-        reset()
-    }
-
-    private fun reset() {
+    suspend fun reset() {
         board.resetPiece()
         board.resetCellColor()
         judePhase()
     }
 
-    fun putPiece(coordinate: Coordinate) {
+    suspend fun putPiece(coordinate: Coordinate) {
         Timber.d("coordinate to put : %s", coordinate)
         Timber.d("%s", state)
         if (state != State.TURN_OF_HUMAN)return
@@ -71,10 +68,11 @@ class Reversi(
         return true
     }
 
-    private fun processTurnPlayer() {
+    private suspend fun processTurnPlayer() {
         val player = playerManager.turnPlayer
         if (player is CPU) {
             state = State.TURN_OF_CPU
+            delay(1000)
             player.play(board)
             playerManager.alternateTurnPlayer()
             //セルの色をリセット
@@ -85,7 +83,7 @@ class Reversi(
         }
     }
 
-    private fun judePhase() {
+    private suspend fun judePhase() {
         if (isContinued()) {
             processTurnPlayer()
         } else {

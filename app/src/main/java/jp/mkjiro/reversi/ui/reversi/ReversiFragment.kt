@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import jp.mkjiro.reversi.R
 import jp.mkjiro.reversi.base.BaseFragment
@@ -45,7 +46,7 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
 //                view.piece_textView.background = ResourcesCompat.getDrawable(resources,R.drawable.piece_black_style,null)
                 viewModel.putPiece(position)
-                adapter.notifyDataSetChanged()
+//                adapter.notifyDataSetChanged()
             }
         })
 
@@ -55,14 +56,18 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
         viewModel.turnPlayerName
             .onBackpressureLatest()
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 turnPlayerName_text.text = it
+                adapter.notifyDataSetChanged()
             }.let(startDisposables::add)
 
         viewModel.winnerPlayerName
             .onBackpressureLatest()
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 turnPlayerName_text.text = it
+                adapter.notifyDataSetChanged()
             }.let(startDisposables::add)
     }
 
