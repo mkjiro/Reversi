@@ -6,7 +6,8 @@ import javax.inject.Singleton
 
 interface ReversiFactory {
     fun create(columns: Int, rows: Int): Reversi
-    fun createVSCPU(columns: Int, rows: Int): Reversi
+    fun createHumVSCPU(columns: Int, rows: Int): Reversi
+    fun createRanVSRan(columns: Int, rows: Int): Reversi
 }
 
 @Singleton
@@ -35,7 +36,7 @@ class ReversiFactoryImpl @Inject constructor(
         )
     }
 
-    override fun createVSCPU(
+    override fun createHumVSCPU(
         columns: Int,
         rows: Int
     ): Reversi {
@@ -44,6 +45,30 @@ class ReversiFactoryImpl @Inject constructor(
                 Human(
                     "Black",
                     Piece(PieceColor.BLACK)
+                ),
+                CPU(
+                    "White",
+                    Piece(PieceColor.WHITE),
+                    RandomStrategy()
+                )
+            )
+        )
+        return Reversi(
+            Board(columns, rows),
+            playerManager
+        )
+    }
+
+    override fun createRanVSRan(
+        columns: Int,
+        rows: Int
+    ): Reversi {
+        var playerManager = PlayerManager(
+            arrayOf(
+                CPU(
+                    "Black",
+                    Piece(PieceColor.BLACK),
+                    RandomStrategy()
                 ),
                 CPU(
                     "White",
