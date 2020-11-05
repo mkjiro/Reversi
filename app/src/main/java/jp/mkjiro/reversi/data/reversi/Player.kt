@@ -7,4 +7,6 @@ abstract class Player(
     fun putPiece(coordinate: Coordinate, board: Board) {
         board.cells[coordinate.y][coordinate.x].piece = piece
     }
+
+    abstract fun play(board: Board)
 }
