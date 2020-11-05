@@ -1,11 +1,14 @@
 package jp.mkjiro.reversi.ui.reversi
 
+import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import jp.mkjiro.reversi.base.BaseViewModel
 import jp.mkjiro.reversi.data.reversi.Coordinate
 import jp.mkjiro.reversi.domain.reversi.ReversiRepository
 import jp.mkjiro.reversi.ui.livedata.EventLiveData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ReversiViewModel @Inject constructor(
@@ -14,7 +17,7 @@ class ReversiViewModel @Inject constructor(
     override val liveEvent =
         EventLiveData<ReversiEvents>()
 
-    val reversi = reversiRepository.createRanVSRan(8, 8)
+    val reversi = reversiRepository.createHumVSCPU(8, 8)
 
     val rows: Int
         get() = reversi.getBoard().cells.size
@@ -27,6 +30,13 @@ class ReversiViewModel @Inject constructor(
 
     val winnerPlayerName: PublishProcessor<String> by lazy {
         PublishProcessor.create<String>()
+    }
+
+    override fun onCreateWithDisposables(disposables: CompositeDisposable) {
+        super.onCreateWithDisposables(disposables)
+        viewModelScope.launch {
+            reversi.reset()
+        }
     }
 
     override fun onStartWithDisposables(disposables: CompositeDisposable) {
@@ -44,6 +54,8 @@ class ReversiViewModel @Inject constructor(
 
     fun putPiece(position: Int) {
         var coordinate = Coordinate(position / columns, position % columns)
-        reversi.putPiece(coordinate)
+        viewModelScope.launch(Dispatchers.Default) {
+            reversi.putPiece(coordinate)
+        }
     }
 }

@@ -8,7 +8,6 @@ class CPU(
     var strategy: Strategy
 ) : Player(name, piece) {
     override fun play(board: Board) {
-        strategy.delay(500)
         val coordinate = strategy.getChosen(this, board)
         putPiece(coordinate, board)
         //ひっくり返す
