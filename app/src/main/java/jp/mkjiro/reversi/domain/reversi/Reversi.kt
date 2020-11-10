@@ -18,12 +18,12 @@ class Reversi(
     }
     private var cellsToPutPiece: Array<Coordinate> = arrayOf()
 
-    var state = State.INIT
+    private var state = State.INIT
 
     suspend fun reset() {
         board.resetPiece()
         board.resetCellColor()
-        judePhase()
+        changeState(State.START)
     }
 
     suspend fun putPiece(coordinate: Coordinate) {
@@ -36,7 +36,7 @@ class Reversi(
     private suspend fun reversePiece(coordinate: Coordinate) {
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
-        state = State.PROCESSING
+        changeState(State.PROCESSING)
         //ボードに駒を置く
         playerManager.turnPlayer.putPiece(coordinate, board)
         //ひっくり返す
@@ -49,7 +49,41 @@ class Reversi(
         Timber.d("%s", playerManager.turnPlayer)
         //セルの色をリセット
         board.resetCellColor()
-        judePhase()
+        changeState(State.JUDGE)
+    }
+
+    private suspend fun changeState(state: State) {
+        this.state = state
+        onStateChanged()
+    }
+
+    private suspend fun onStateChanged() {
+        Timber.d("state: $state")
+        when (state) {
+            State.INIT -> {
+                reset()
+            }
+            State.START -> {
+                changeState(State.JUDGE)
+            }
+            State.JUDGE -> {
+                if (isContinued()) {
+                    changeState(State.PLAYER)
+                } else {
+                    changeState(State.FINISH)
+                }
+            }
+            State.PLAYER -> {
+                processTurnPlayer()
+            }
+            State.PROCESSING -> {
+            }
+            State.FINISH -> {
+            }
+            else -> {
+
+            }
+        }
     }
 
     private fun isContinued(): Boolean {
@@ -87,19 +121,11 @@ class Reversi(
                 playerManager.alternateTurnPlayer()
                 //セルの色をリセット
                 board.resetCellColor()
-                judePhase()
+                changeState(State.JUDGE)
             }
             is Human -> {
                 state = State.TURN_OF_HUMAN
             }
-        }
-    }
-
-    private suspend fun judePhase() {
-        if (isContinued()) {
-            processTurnPlayer()
-        } else {
-            state = State.FINISH
         }
     }
 
@@ -127,7 +153,10 @@ class Reversi(
 
 enum class State {
     INIT,
+    START,
+    JUDGE,
     PROCESSING,
+    PLAYER,
     TURN_OF_HUMAN,
     TURN_OF_CPU,
     FINISH
