@@ -31,6 +31,10 @@ class Reversi(
         Timber.d("%s", state)
         if (state != State.TURN_OF_HUMAN)return
         //駒が置ける場所かチェック
+        reversePiece(coordinate)
+    }
+
+    private suspend fun reversePiece(coordinate: Coordinate) {
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
         state = State.PROCESSING
         //ボードに駒を置く
@@ -50,36 +54,42 @@ class Reversi(
 
     private fun isContinued(): Boolean {
         //駒が置けるかチェック
-        if (paintCellsToPuPiece().isEmpty()) {
+        var cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
+        if (cells.isEmpty()) {
             //ターンプレイヤーを変更
             playerManager.alternateTurnPlayer()
-            if (paintCellsToPuPiece().isEmpty()) {
+            cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
+            if (cells.isEmpty()) {
                 //ゲーム終了
                 winnerPlayerName.onNext(
                     ReversiLogic.getWinnerName(board, playerManager.players)
                 )
                 return false
             } else {
+                paintCellsToPuPiece(cells)
                 playerName.onNext(playerManager.turnPlayer.name)
             }
         } else {
+            paintCellsToPuPiece(cells)
             playerName.onNext(playerManager.turnPlayer.name)
         }
         return true
     }
 
     private suspend fun processTurnPlayer() {
-        val player = playerManager.turnPlayer
-        if (player is CPU) {
-            state = State.TURN_OF_CPU
-            delay(1000)
-            player.play(board)
-            playerManager.alternateTurnPlayer()
-            //セルの色をリセット
-            board.resetCellColor()
-            judePhase()
-        } else if (player is Human) {
-            state = State.TURN_OF_HUMAN
+        when (val player = playerManager.turnPlayer) {
+            is CPU -> {
+                state = State.TURN_OF_CPU
+                delay(1000)
+                player.play(board)
+                playerManager.alternateTurnPlayer()
+                //セルの色をリセット
+                board.resetCellColor()
+                judePhase()
+            }
+            is Human -> {
+                state = State.TURN_OF_HUMAN
+            }
         }
     }
 
@@ -91,8 +101,7 @@ class Reversi(
         }
     }
 
-    private fun paintCellsToPuPiece(): Array<Coordinate> {
-        val cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
+    private fun paintCellsToPuPiece(cells: Array<Coordinate>): Array<Coordinate> {
         if (cells.isNotEmpty()) {
             cells.map {
                 Timber.d("%s", it)
