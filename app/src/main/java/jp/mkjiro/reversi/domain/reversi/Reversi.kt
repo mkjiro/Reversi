@@ -9,7 +9,7 @@ import timber.log.Timber
 class Reversi(
     private val board: Board,
     private val playerManager: PlayerManager
-) {
+) : ReversiStateMachine() {
     private val playerName: BehaviorSubject<String> by lazy {
         BehaviorSubject.create<String>()
     }
@@ -18,22 +18,18 @@ class Reversi(
     }
     private var cellsToPutPiece: Array<Coordinate> = arrayOf()
 
-    private var state = State.INIT
-
-    suspend fun reset() {
-        board.resetPiece()
-        board.resetCellColor()
-        changeState(State.START)
+    init {
+        changeState(State.INIT)
     }
 
-    suspend fun putPiece(coordinate: Coordinate) {
+    fun putPiece(coordinate: Coordinate) {
         Timber.d("coordinate to put : %s", coordinate)
         Timber.d("%s", state)
         if (state != State.TURN_OF_HUMAN)return
         reversePiece(coordinate)
     }
 
-    private suspend fun reversePiece(coordinate: Coordinate) {
+    private fun reversePiece(coordinate: Coordinate) {
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
         changeState(State.PROCESSING)
@@ -52,37 +48,37 @@ class Reversi(
         changeState(State.JUDGE)
     }
 
-    private suspend fun changeState(state: State) {
-        this.state = state
-        onStateChanged()
+    override fun onInit() {
+        board.resetPiece()
+        board.resetCellColor()
+        changeState(State.START)
     }
 
-    private suspend fun onStateChanged() {
-        Timber.d("state: $state")
-        when (state) {
-            State.INIT -> {
-                reset()
-            }
-            State.START -> {
+    override fun onStart() {
+        changeState(State.JUDGE)
+    }
+
+    override fun onTurnPlayer() {
+        when (val player = playerManager.turnPlayer) {
+            is CPU -> {
+                state = State.TURN_OF_CPU
+                player.play(board)
+                playerManager.alternateTurnPlayer()
+                //セルの色をリセット
+                board.resetCellColor()
                 changeState(State.JUDGE)
             }
-            State.JUDGE -> {
-                if (isContinued()) {
-                    changeState(State.PLAYER)
-                } else {
-                    changeState(State.FINISH)
-                }
+            is Human -> {
+                state = State.TURN_OF_HUMAN
             }
-            State.PLAYER -> {
-                processTurnPlayer()
-            }
-            State.PROCESSING -> {
-            }
-            State.FINISH -> {
-            }
-            else -> {
+        }
+    }
 
-            }
+    override fun onJudge() {
+        if (isContinued()) {
+            changeState(State.PLAYER)
+        } else {
+            changeState(State.FINISH)
         }
     }
 
@@ -112,23 +108,6 @@ class Reversi(
         return true
     }
 
-    private suspend fun processTurnPlayer() {
-        when (val player = playerManager.turnPlayer) {
-            is CPU -> {
-                state = State.TURN_OF_CPU
-                delay(1000)
-                player.play(board)
-                playerManager.alternateTurnPlayer()
-                //セルの色をリセット
-                board.resetCellColor()
-                changeState(State.JUDGE)
-            }
-            is Human -> {
-                state = State.TURN_OF_HUMAN
-            }
-        }
-    }
-
     private fun paintCellsToPuPiece(cells: Array<Coordinate>) {
         if (cells.isNotEmpty()) {
             cells.map {
@@ -149,15 +128,4 @@ class Reversi(
     fun getBoard(): Board {
         return board
     }
-}
-
-enum class State {
-    INIT,
-    START,
-    JUDGE,
-    PROCESSING,
-    PLAYER,
-    TURN_OF_HUMAN,
-    TURN_OF_CPU,
-    FINISH
 }

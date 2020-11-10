@@ -32,13 +32,6 @@ class ReversiViewModel @Inject constructor(
         PublishProcessor.create<String>()
     }
 
-    override fun onCreateWithDisposables(disposables: CompositeDisposable) {
-        super.onCreateWithDisposables(disposables)
-        viewModelScope.launch {
-            reversi.reset()
-        }
-    }
-
     override fun onStartWithDisposables(disposables: CompositeDisposable) {
         super.onStartWithDisposables(disposables)
         reversi.getTurnPlayerName().subscribe {
