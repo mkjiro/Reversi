@@ -1,14 +1,14 @@
 package jp.mkjiro.reversi.domain.reversi
 
 abstract class ReversiStateMachine {
-    lateinit var state: State
+    protected lateinit var state: State
 
-    abstract fun onInit()
-    abstract fun onStart()
-    abstract fun onJudge()
-    abstract fun onTurnPlayer()
+    protected abstract fun onInit()
+    protected abstract fun onStart()
+    protected abstract fun onJudge()
+    protected abstract fun onTurnPlayer()
 
-    fun changeState(state: State) {
+    protected fun changeState(state: State) {
         this.state = state
         onStateChanged()
     }
