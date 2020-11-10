@@ -3,7 +3,6 @@ package jp.mkjiro.reversi.domain.reversi
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.BehaviorSubject
 import jp.mkjiro.reversi.data.reversi.*
-import kotlinx.coroutines.*
 import timber.log.Timber
 
 class Reversi(
