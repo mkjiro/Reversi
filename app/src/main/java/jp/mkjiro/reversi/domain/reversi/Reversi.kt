@@ -30,11 +30,11 @@ class Reversi(
         Timber.d("coordinate to put : %s", coordinate)
         Timber.d("%s", state)
         if (state != State.TURN_OF_HUMAN)return
-        //駒が置ける場所かチェック
         reversePiece(coordinate)
     }
 
     private suspend fun reversePiece(coordinate: Coordinate) {
+        //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
         state = State.PROCESSING
         //ボードに駒を置く
@@ -66,10 +66,12 @@ class Reversi(
                 )
                 return false
             } else {
+                cellsToPutPiece = cells
                 paintCellsToPuPiece(cells)
                 playerName.onNext(playerManager.turnPlayer.name)
             }
         } else {
+            cellsToPutPiece = cells
             paintCellsToPuPiece(cells)
             playerName.onNext(playerManager.turnPlayer.name)
         }
@@ -101,15 +103,13 @@ class Reversi(
         }
     }
 
-    private fun paintCellsToPuPiece(cells: Array<Coordinate>): Array<Coordinate> {
+    private fun paintCellsToPuPiece(cells: Array<Coordinate>) {
         if (cells.isNotEmpty()) {
             cells.map {
                 Timber.d("%s", it)
                 board.paintCell(it, CellColor.RED)
             }
-            cellsToPutPiece = cells
         }
-        return cells
     }
 
     fun getTurnPlayerName(): BehaviorSubject<String> {
