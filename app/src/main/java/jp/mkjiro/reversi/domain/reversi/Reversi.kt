@@ -18,7 +18,8 @@ class Reversi(
     private var cellsToPutPiece: Array<Coordinate> = arrayOf()
 
     init {
-        changeState(State.INIT)
+        setFirstState()
+        emitEvent(Event.START)
     }
 
     fun putPiece(coordinate: Coordinate) {
@@ -31,7 +32,7 @@ class Reversi(
     private fun reversePiece(coordinate: Coordinate) {
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
-        changeState(State.PROCESSING)
+        emitEvent(Event.PUT)
         //ボードに駒を置く
         playerManager.turnPlayer.putPiece(coordinate, board)
         //ひっくり返す
@@ -44,49 +45,44 @@ class Reversi(
         Timber.d("%s", playerManager.turnPlayer)
         //セルの色をリセット
         board.resetCellColor()
-        changeState(State.JUDGE_FIRST)
+        emitEvent(Event.FINISH)
     }
 
-    override fun onInit() {
+    override fun reset() {
         board.resetPiece()
         board.resetCellColor()
-        changeState(State.START)
     }
 
-    override fun onStart() {
-        changeState(State.JUDGE_FIRST)
-    }
-
-    override fun onTurnPlayer() {
+    override fun processPlayer() {
         when (val player = playerManager.turnPlayer) {
             is CPU -> {
-                state = State.TURN_OF_CPU
+                emitEvent(Event.CPU)
                 player.play(board)
                 playerManager.alternateTurnPlayer()
                 //セルの色をリセット
                 board.resetCellColor()
-                changeState(State.JUDGE_FIRST)
+                emitEvent(Event.FINISH)
             }
             is Human -> {
-                state = State.TURN_OF_HUMAN
+                emitEvent(Event.HUMAN)
             }
         }
     }
 
-    override fun onJudgeFirst() {
+    override fun judgeFirst() {
         //駒が置けるかチェック
         var cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
         if (cells.isEmpty()) {
-            changeState(State.JUDGE_SECOND)
+            emitEvent(Event.NOT_PUT)
         } else {
             cellsToPutPiece = cells
             paintCellsToPuPiece(cells)
             playerName.onNext(playerManager.turnPlayer.name)
-            changeState(State.PLAYER)
+            emitEvent(Event.CONTINUE)
         }
     }
 
-    override fun onJudgeSecond() {
+    override fun judgeSecond() {
         //ターンプレイヤーを変更
         playerManager.alternateTurnPlayer()
         val cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
@@ -94,12 +90,12 @@ class Reversi(
             winnerPlayerName.onNext(
                 ReversiLogic.getWinnerName(board, playerManager.players)
             )
-            changeState(State.FINISH)
+            emitEvent(Event.NOT_PUT)
         } else {
             cellsToPutPiece = cells
             paintCellsToPuPiece(cells)
             playerName.onNext(playerManager.turnPlayer.name)
-            changeState(State.PLAYER)
+            emitEvent(Event.CONTINUE)
         }
     }
 
