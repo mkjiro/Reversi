@@ -1,6 +1,5 @@
 package jp.mkjiro.reversi.domain.reversi
 
-import android.util.EventLog
 
 abstract class ReversiStateMachine {
     protected lateinit var state: State
@@ -78,7 +77,7 @@ abstract class ReversiStateMachine {
         onStateChanged()
     }
 
-    protected fun changeState(state: State) {
+    private fun changeState(state: State) {
         this.state = state
         onStateChanged()
     }
