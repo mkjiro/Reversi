@@ -5,8 +5,12 @@ abstract class ReversiStateMachine {
 
     protected abstract fun onInit()
     protected abstract fun onStart()
-    protected abstract fun onJudge()
+    protected abstract fun onJudgeFirst()
+    protected abstract fun onJudgeSecond()
     protected abstract fun onTurnPlayer()
+
+    protected fun emitEvent() {
+    }
 
     protected fun changeState(state: State) {
         this.state = state
@@ -21,8 +25,11 @@ abstract class ReversiStateMachine {
             State.START -> {
                 onStart()
             }
-            State.JUDGE -> {
-                onJudge()
+            State.JUDGE_FIRST -> {
+                onJudgeFirst()
+            }
+            State.JUDGE_SECOND -> {
+                onJudgeSecond()
             }
             State.PLAYER -> {
                 onTurnPlayer()
@@ -39,7 +46,8 @@ abstract class ReversiStateMachine {
     enum class State {
         INIT,
         START,
-        JUDGE,
+        JUDGE_FIRST,
+        JUDGE_SECOND,
         PROCESSING,
         PLAYER,
         TURN_OF_HUMAN,

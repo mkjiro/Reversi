@@ -44,7 +44,7 @@ class Reversi(
         Timber.d("%s", playerManager.turnPlayer)
         //セルの色をリセット
         board.resetCellColor()
-        changeState(State.JUDGE)
+        changeState(State.JUDGE_FIRST)
     }
 
     override fun onInit() {
@@ -54,7 +54,7 @@ class Reversi(
     }
 
     override fun onStart() {
-        changeState(State.JUDGE)
+        changeState(State.JUDGE_FIRST)
     }
 
     override fun onTurnPlayer() {
@@ -65,7 +65,7 @@ class Reversi(
                 playerManager.alternateTurnPlayer()
                 //セルの色をリセット
                 board.resetCellColor()
-                changeState(State.JUDGE)
+                changeState(State.JUDGE_FIRST)
             }
             is Human -> {
                 state = State.TURN_OF_HUMAN
@@ -73,38 +73,34 @@ class Reversi(
         }
     }
 
-    override fun onJudge() {
-        if (isContinued()) {
-            changeState(State.PLAYER)
-        } else {
-            changeState(State.FINISH)
-        }
-    }
-
-    private fun isContinued(): Boolean {
+    override fun onJudgeFirst() {
         //駒が置けるかチェック
         var cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
         if (cells.isEmpty()) {
-            //ターンプレイヤーを変更
-            playerManager.alternateTurnPlayer()
-            cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
-            if (cells.isEmpty()) {
-                //ゲーム終了
-                winnerPlayerName.onNext(
-                    ReversiLogic.getWinnerName(board, playerManager.players)
-                )
-                return false
-            } else {
-                cellsToPutPiece = cells
-                paintCellsToPuPiece(cells)
-                playerName.onNext(playerManager.turnPlayer.name)
-            }
+            changeState(State.JUDGE_SECOND)
         } else {
             cellsToPutPiece = cells
             paintCellsToPuPiece(cells)
             playerName.onNext(playerManager.turnPlayer.name)
+            changeState(State.PLAYER)
         }
-        return true
+    }
+
+    override fun onJudgeSecond() {
+        //ターンプレイヤーを変更
+        playerManager.alternateTurnPlayer()
+        val cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
+        if (cells.isEmpty()) {
+            winnerPlayerName.onNext(
+                ReversiLogic.getWinnerName(board, playerManager.players)
+            )
+            changeState(State.FINISH)
+        } else {
+            cellsToPutPiece = cells
+            paintCellsToPuPiece(cells)
+            playerName.onNext(playerManager.turnPlayer.name)
+            changeState(State.PLAYER)
+        }
     }
 
     private fun paintCellsToPuPiece(cells: Array<Coordinate>) {
