@@ -5,7 +5,7 @@ class Human(
     piece: Piece
 ) : Player(name, piece) {
 
-    override fun play(board: Board) {
+    override fun play(playerManager: PlayerManager, board: Board) {
         TODO("Not yet implemented")
     }
 }

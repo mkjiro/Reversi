@@ -1,6 +1,5 @@
 package jp.mkjiro.reversi.domain.reversi
 
-
 abstract class ReversiStateMachine {
     protected lateinit var state: State
 
@@ -9,17 +8,17 @@ abstract class ReversiStateMachine {
     protected abstract fun judgeSecond()
     protected abstract fun processPlayer()
 
-    protected fun emitEvent(event : Event) {
-        when(state){
+    protected fun emitEvent(event: Event) {
+        when (state) {
             State.INIT -> {
-                when(event){
+                when (event) {
                     Event.START -> {
                         changeState(State.JUDGE_FIRST)
                     }
                 }
             }
             State.JUDGE_FIRST -> {
-                when(event){
+                when (event) {
                     Event.CONTINUE -> {
                         changeState(State.PLAYER_TURN)
                     }
@@ -29,17 +28,17 @@ abstract class ReversiStateMachine {
                 }
             }
             State.JUDGE_SECOND -> {
-                when(event){
+                when (event) {
                     Event.CONTINUE -> {
                         changeState(State.PLAYER_TURN)
                     }
-                    Event.NOT_PUT ->{
+                    Event.NOT_PUT -> {
                         changeState(State.FINISH)
                     }
                 }
             }
-            State.PLAYER_TURN ->{
-                when(event){
+            State.PLAYER_TURN -> {
+                when (event) {
                     Event.HUMAN -> {
                         changeState(State.TURN_OF_HUMAN)
                     }
@@ -49,21 +48,21 @@ abstract class ReversiStateMachine {
                 }
             }
             State.TURN_OF_CPU -> {
-                when(event){
+                when (event) {
                     Event.FINISH -> {
                         changeState(State.JUDGE_FIRST)
                     }
                 }
             }
-            State.TURN_OF_HUMAN ->{
-                when(event){
+            State.TURN_OF_HUMAN -> {
+                when (event) {
                     Event.PUT -> {
                         changeState(State.PROCESSING)
                     }
                 }
             }
             State.PROCESSING -> {
-                when(event){
+                when (event) {
                     Event.FINISH -> {
                         changeState(State.JUDGE_FIRST)
                     }
@@ -72,7 +71,7 @@ abstract class ReversiStateMachine {
         }
     }
 
-    protected fun setFirstState(){
+    protected fun setFirstState() {
         this.state = State.INIT
         onStateChanged()
     }
@@ -105,7 +104,7 @@ abstract class ReversiStateMachine {
         }
     }
 
-    enum class Event(){
+    enum class Event() {
         START,
         FINISH,
         HUMAN,
