@@ -7,8 +7,8 @@ class CPU(
     piece: Piece,
     var strategy: Strategy
 ) : Player(name, piece) {
-    override fun play(board: Board) {
-        val coordinate = strategy.getChosen(this, board)
+    override fun play(playerManager: PlayerManager, board: Board) {
+        val coordinate = strategy.getChosen(playerManager, board)
         putPiece(coordinate, board)
         //ひっくり返す
         ReversiLogic.getOverturnedPieces(coordinate, this, board)

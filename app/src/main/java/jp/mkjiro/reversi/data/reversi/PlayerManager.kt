@@ -8,4 +8,10 @@ class PlayerManager(var players: Array<Player>) {
     fun alternateTurnPlayer() {
         turnPlayerIndex = (turnPlayerIndex + 1) % players.size
     }
+
+    fun copy(): PlayerManager {
+        val playerManager = PlayerManager(this.players)
+        playerManager.turnPlayerIndex = this.turnPlayerIndex
+        return playerManager
+    }
 }

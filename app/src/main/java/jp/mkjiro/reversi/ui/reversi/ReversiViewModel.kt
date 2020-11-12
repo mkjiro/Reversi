@@ -43,6 +43,10 @@ class ReversiViewModel @Inject constructor(
             val showName = "$it is Winner !!!"
             winnerPlayerName.onNext(showName)
         }.let(disposables::add)
+
+        viewModelScope.launch(Dispatchers.Default) {
+            reversi.start()
+        }
     }
 
     fun putPiece(position: Int) {

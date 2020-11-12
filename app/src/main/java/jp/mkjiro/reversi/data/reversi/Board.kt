@@ -1,8 +1,8 @@
 package jp.mkjiro.reversi.data.reversi
 
 class Board(
-    columns: Int = 8,
-    rows: Int = 8
+    val columns: Int = 8,
+    val rows: Int = 8
 ) {
     var cells: Array<Array<Cell>> = Array(rows) {
         Array(columns) {
@@ -34,5 +34,15 @@ class Board(
                 it.color = CellColor.GREEN
             }
         }
+    }
+
+    fun copy(): Board {
+        val board = Board()
+        board.cells = Array(this.rows) { y ->
+            Array(this.columns) { x ->
+                this.cells[y][x].copy()
+            }
+        }
+        return board
     }
 }

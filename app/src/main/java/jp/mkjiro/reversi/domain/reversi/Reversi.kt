@@ -19,6 +19,9 @@ class Reversi(
 
     init {
         setFirstState()
+    }
+
+    fun start() {
         emitEvent(Event.START)
     }
 
@@ -42,7 +45,6 @@ class Reversi(
             }
         //ターンプレイヤーを変更
         playerManager.alternateTurnPlayer()
-        Timber.d("%s", playerManager.turnPlayer)
         //セルの色をリセット
         board.resetCellColor()
         emitEvent(Event.FINISH)
@@ -54,10 +56,11 @@ class Reversi(
     }
 
     override fun processPlayer() {
+        Timber.d("%s", playerManager.turnPlayer)
         when (val player = playerManager.turnPlayer) {
             is CPU -> {
                 emitEvent(Event.CPU)
-                player.play(board)
+                player.play(playerManager, board)
                 playerManager.alternateTurnPlayer()
                 //セルの色をリセット
                 board.resetCellColor()

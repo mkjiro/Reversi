@@ -7,6 +7,8 @@ interface ReversiRepository {
     fun create(columns: Int, rows: Int): Reversi
     fun createHumVSCPU(columns: Int, rows: Int): Reversi
     fun createRanVSRan(columns: Int, rows: Int): Reversi
+    fun createAlphaVSAlpha(columns: Int, rows: Int): Reversi
+    fun createAlphaVSRan(columns: Int, rows: Int): Reversi
 }
 
 @Singleton
@@ -23,5 +25,13 @@ class ReversiRepositoryImpl @Inject constructor(
 
     override fun createRanVSRan(columns: Int, rows: Int): Reversi {
         return reversiFactory.createRanVSRan(columns, rows)
+    }
+
+    override fun createAlphaVSAlpha(columns: Int, rows: Int): Reversi {
+        return reversiFactory.createAlphaVSAlpha(columns, rows)
+    }
+
+    override fun createAlphaVSRan(columns: Int, rows: Int): Reversi {
+        return reversiFactory.createAlphaVSRan(columns, rows)
     }
 }

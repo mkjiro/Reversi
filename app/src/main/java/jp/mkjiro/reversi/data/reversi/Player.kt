@@ -8,5 +8,5 @@ abstract class Player(
         board.cells[coordinate.y][coordinate.x].piece = piece
     }
 
-    abstract fun play(board: Board)
+    abstract fun play(playerManager: PlayerManager, board: Board)
 }
