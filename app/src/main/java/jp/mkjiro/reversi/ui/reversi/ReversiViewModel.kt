@@ -49,6 +49,11 @@ class ReversiViewModel @Inject constructor(
         }
     }
 
+    override fun onStop() {
+        reversi.finish()
+        super.onStop()
+    }
+
     fun putPiece(position: Int) {
         var coordinate = Coordinate(position / columns, position % columns)
         viewModelScope.launch(Dispatchers.Default) {

@@ -3,12 +3,19 @@ package jp.mkjiro.reversi.domain.reversi
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.BehaviorSubject
 import jp.mkjiro.reversi.data.reversi.*
+import kotlinx.coroutines.*
 import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
 
 class Reversi(
     private val board: Board,
     private val playerManager: PlayerManager
-) : ReversiStateMachine() {
+) : ReversiStateMachine(), CoroutineScope {
+
+    private val job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Default
+
     private val playerName: BehaviorSubject<String> by lazy {
         BehaviorSubject.create<String>()
     }
@@ -23,6 +30,10 @@ class Reversi(
 
     fun start() {
         emitEvent(Event.START)
+    }
+
+    fun finish() {
+        job.cancel()
     }
 
     fun putPiece(coordinate: Coordinate) {
@@ -60,11 +71,14 @@ class Reversi(
         when (val player = playerManager.turnPlayer) {
             is CPU -> {
                 emitEvent(Event.CPU)
-                player.play(playerManager, board)
-                playerManager.alternateTurnPlayer()
-                //セルの色をリセット
-                board.resetCellColor()
-                emitEvent(Event.FINISH)
+                runBlocking {
+                    delay(2000)
+                    player.play(playerManager, board)
+                    playerManager.alternateTurnPlayer()
+                    //セルの色をリセット
+                    board.resetCellColor()
+                    emitEvent(Event.FINISH)
+                }
             }
             is Human -> {
                 emitEvent(Event.HUMAN)
