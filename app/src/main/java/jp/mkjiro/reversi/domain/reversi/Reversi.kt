@@ -61,12 +61,12 @@ class Reversi(
         emitEvent(Event.FINISH)
     }
 
-    override fun reset() {
+    override fun runInitPhase() {
         board.resetPiece()
         board.resetCellColor()
     }
 
-    override fun processPlayer() {
+    override fun runPlayerPhase() {
         Timber.d("%s", playerManager.turnPlayer)
         when (val player = playerManager.turnPlayer) {
             is CPU -> {
@@ -86,7 +86,7 @@ class Reversi(
         }
     }
 
-    override fun judgeFirst() {
+    override fun runJudgeFirstPhase() {
         //駒が置けるかチェック
         var cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
         if (cells.isEmpty()) {
@@ -99,7 +99,7 @@ class Reversi(
         }
     }
 
-    override fun judgeSecond() {
+    override fun runJudgeSecondPhase() {
         //ターンプレイヤーを変更
         playerManager.alternateTurnPlayer()
         val cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
