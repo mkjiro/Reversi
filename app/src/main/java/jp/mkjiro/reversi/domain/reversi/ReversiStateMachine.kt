@@ -3,10 +3,10 @@ package jp.mkjiro.reversi.domain.reversi
 abstract class ReversiStateMachine {
     protected lateinit var state: State
 
-    protected abstract fun reset()
-    protected abstract fun judgeFirst()
-    protected abstract fun judgeSecond()
-    protected abstract fun processPlayer()
+    protected abstract fun runInitPhase()
+    protected abstract fun runJudgeFirstPhase()
+    protected abstract fun runJudgeSecondPhase()
+    protected abstract fun runPlayerPhase()
 
     protected fun emitEvent(event: Event) {
         when (state) {
@@ -84,16 +84,16 @@ abstract class ReversiStateMachine {
     private fun onStateChanged() {
         when (state) {
             State.INIT -> {
-                reset()
+                runInitPhase()
             }
             State.JUDGE_FIRST -> {
-                judgeFirst()
+                runJudgeFirstPhase()
             }
             State.JUDGE_SECOND -> {
-                judgeSecond()
+                runJudgeSecondPhase()
             }
             State.PLAYER_TURN -> {
-                processPlayer()
+                runPlayerPhase()
             }
             State.PROCESSING -> {
             }
@@ -104,7 +104,7 @@ abstract class ReversiStateMachine {
         }
     }
 
-    enum class Event() {
+    enum class Event {
         START,
         FINISH,
         HUMAN,
