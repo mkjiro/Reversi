@@ -6,6 +6,8 @@ class Human(
 ) : Player(name, piece) {
 
     override fun play(playerManager: PlayerManager, board: Board) {
-        TODO("Not yet implemented")
+        state = State.READY
     }
+
+    fun isReady(): Boolean { return state == State.READY }
 }

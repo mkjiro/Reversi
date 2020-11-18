@@ -39,31 +39,7 @@ abstract class ReversiStateMachine {
             }
             State.PLAYER_TURN -> {
                 when (event) {
-                    Event.HUMAN -> {
-                        changeState(State.TURN_OF_HUMAN)
-                    }
-                    Event.CPU -> {
-                        changeState(State.TURN_OF_CPU)
-                    }
-                }
-            }
-            State.TURN_OF_CPU -> {
-                when (event) {
-                    Event.FINISH -> {
-                        changeState(State.JUDGE_FIRST)
-                    }
-                }
-            }
-            State.TURN_OF_HUMAN -> {
-                when (event) {
                     Event.PUT -> {
-                        changeState(State.PROCESSING)
-                    }
-                }
-            }
-            State.PROCESSING -> {
-                when (event) {
-                    Event.FINISH -> {
                         changeState(State.JUDGE_FIRST)
                     }
                 }
@@ -95,8 +71,6 @@ abstract class ReversiStateMachine {
             State.PLAYER_TURN -> {
                 runPlayerPhase()
             }
-            State.PROCESSING -> {
-            }
             State.FINISH -> {
             }
             else -> {
@@ -107,8 +81,6 @@ abstract class ReversiStateMachine {
     enum class Event {
         START,
         FINISH,
-        HUMAN,
-        CPU,
         CONTINUE,
         PUT,
         NOT_PUT,
@@ -118,10 +90,7 @@ abstract class ReversiStateMachine {
         INIT,
         JUDGE_FIRST,
         JUDGE_SECOND,
-        PROCESSING,
         PLAYER_TURN,
-        TURN_OF_HUMAN,
-        TURN_OF_CPU,
         FINISH
     }
 }
