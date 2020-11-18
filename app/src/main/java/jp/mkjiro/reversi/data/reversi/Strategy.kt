@@ -27,9 +27,7 @@ class AlphaBetaStrategy : Strategy {
         arrayOf(120, -20, 21, 6, 6, 21, -20, 120)
     )
 
-    private val MAX_DEPTH = 3
-    private val MAX_INDEX = -10000
-    private val MIN_INDEX = 10000
+    private val MAX_DEPTH = 5
 
     private fun reversePiece(coordinate: Coordinate, playerManager: PlayerManager, board: Board) {
         playerManager.turnPlayer.putPiece(coordinate, board)
@@ -59,15 +57,15 @@ class AlphaBetaStrategy : Strategy {
         playerManager: PlayerManager,
         board: Board,
         depth: Int
-    ): Int {
-        var maxCoorinate = Coordinate(-1, -1)
-        var maxIndexSum = MAX_INDEX
+    ): Pair<Coordinate, Int> {
+        var maxCoordinate = coordinate
         var maxAlpha = alpha
         var maxBeta = beta
         if (depth == 0) {
             val pm = playerManager.copy()
             Timber.d("depth : %s eval : %s", depth, indexTable[coordinate.y][coordinate.x])
-            return - indexTable[coordinate.y][coordinate.x]
+            return coordinate to 0
+//            return coordinate to indexTable[coordinate.y][coordinate.x]
         }
         ReversiLogic.getCellToPutPiece(
             playerManager.turnPlayer,
@@ -77,41 +75,29 @@ class AlphaBetaStrategy : Strategy {
             val bd = board.copy()
             reversePiece(cd, pm, bd)
             pm.alternateTurnPlayer()
-            val indexSum = -1 * evalByAlphaBeta(cd, -maxBeta, -maxAlpha, pm, bd, depth - 1)
-            if (maxAlpha < indexSum) {
+            var (_, indexSum) = evalByAlphaBeta(cd, -maxBeta, -maxAlpha, pm, bd, depth - 1)
+            indexSum += indexTable[cd.y][cd.x]
+            if (maxCoordinate == Coordinate(-1, -1))maxCoordinate = cd
+            if (maxAlpha <= indexSum) {
                 maxAlpha = indexSum
-                maxCoorinate = cd
+                maxCoordinate = cd
             }
-            Timber.d("player: ${playerManager.turnPlayer} depth : $depth eval : $indexSum alpha : $maxAlpha beta : $maxBeta")
-            if (maxAlpha >= maxBeta)return maxAlpha
+            Timber.d("player: ${playerManager.turnPlayer} depth : $depth ,eval : $indexSum ,alpha : $maxAlpha ,beta : $maxBeta")
+            if (maxAlpha >= maxBeta)return maxCoordinate to - maxAlpha
         }
-        return maxAlpha
+        return maxCoordinate to - maxAlpha
     }
 
     override fun getChosen(playerManager: PlayerManager, board: Board): Coordinate {
-        var maxCoorinate = Coordinate(-1, -1)
-        var maxIndexSum = -1000000
         var maxAlpha = -1000
         var maxBeta = 1000
         Timber.d("===turn start===")
-        ReversiLogic.getCellToPutPiece(
-            playerManager.turnPlayer,
-            board
-        ).map { cd ->
-            val pm = playerManager.copy()
-            val bd = board.copy()
-            reversePiece(cd, pm, bd)
-            pm.alternateTurnPlayer()
-            val indexSum = - evalByAlphaBeta(cd, -1000, 1000, pm, bd, MAX_DEPTH-1)
-            Timber.d("depth : $MAX_DEPTH eval : $indexSum")
-            if (maxAlpha < indexSum) {
-                maxAlpha = indexSum
-                maxCoorinate = cd
-                Timber.d("cd : $cd updatedAlpha : $maxAlpha")
-            }
-        }
-        Timber.d("seleced cd : $maxCoorinate maxAlpha : $maxAlpha")
+        val pm = playerManager.copy()
+        val bd = board.copy()
+        val (coordinate, evaluation) = evalByAlphaBeta(Coordinate(-1, -1), maxAlpha, maxBeta, pm, bd, MAX_DEPTH)
+        Timber.d("depth : $MAX_DEPTH eval : ${-evaluation}")
+        Timber.d("chosen cd : $coordinate")
         Timber.d("===turn end===")
-        return maxCoorinate
+        return coordinate
     }
 }
