@@ -39,14 +39,16 @@ class Reversi(
     fun putPiece(coordinate: Coordinate) {
         Timber.d("coordinate to put : %s", coordinate)
         Timber.d("%s", state)
-        if (state != State.TURN_OF_HUMAN)return
-        reversePiece(coordinate)
+        val player = playerManager.turnPlayer
+        if (player is Human && player.isReady()) {
+            reversePiece(coordinate)
+        }
     }
 
     private fun reversePiece(coordinate: Coordinate) {
         //駒が置ける場所かチェック
         if (!cellsToPutPiece.contains(coordinate))return //置けない場所
-        emitEvent(Event.PUT)
+        playerManager.turnPlayer.run()
         //ボードに駒を置く
         playerManager.turnPlayer.putPiece(coordinate, board)
         //ひっくり返す
@@ -54,11 +56,12 @@ class Reversi(
             .map {
                 playerManager.turnPlayer.putPiece(it, board)
             }
+        playerManager.turnPlayer.finish()
         //ターンプレイヤーを変更
         playerManager.alternateTurnPlayer()
         //セルの色をリセット
         board.resetCellColor()
-        emitEvent(Event.FINISH)
+        emitEvent(Event.PUT)
     }
 
     override fun runInitPhase() {
@@ -70,18 +73,17 @@ class Reversi(
         Timber.d("%s", playerManager.turnPlayer)
         when (val player = playerManager.turnPlayer) {
             is CPU -> {
-                emitEvent(Event.CPU)
                 runBlocking {
                     delay(2000)
                     player.play(playerManager, board)
                     playerManager.alternateTurnPlayer()
                     //セルの色をリセット
                     board.resetCellColor()
-                    emitEvent(Event.FINISH)
+                    emitEvent(Event.PUT)
                 }
             }
             is Human -> {
-                emitEvent(Event.HUMAN)
+                player.play(playerManager, board)
             }
         }
     }
@@ -119,7 +121,6 @@ class Reversi(
     private fun paintCellsToPuPiece(cells: Array<Coordinate>) {
         if (cells.isNotEmpty()) {
             cells.map {
-                Timber.d("%s", it)
                 board.paintCell(it, CellColor.RED)
             }
         }
