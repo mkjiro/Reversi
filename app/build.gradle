@@ -110,14 +110,27 @@ android {
     tasks.preBuild {
         dependsOn(tasks.ktlintFormat)
     }
+
+    // for junit5
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
-    //Test
-    testImplementation 'junit:junit:4.13'
+    //test
+    testImplementation(platform("org.junit:junit-bom:$junit_version"))
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.junit.jupiter:junit-jupiter-api"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+
     androidTestImplementation 'androidx.test:runner:1.2.0'
+
+    //timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     //kotlin
