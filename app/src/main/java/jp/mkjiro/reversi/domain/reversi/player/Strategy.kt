@@ -102,8 +102,8 @@ class AlphaBetaStrategy : Strategy {
     }
 
     override fun getChosen(playerManager: PlayerManager, board: Board): Coordinate {
-        var maxAlpha = -1000
-        var maxBeta = 1000
+        val maxAlpha = -1000
+        val maxBeta = 1000
         Timber.d("===turn start===")
         val pm = playerManager.copy()
         val bd = board.copy()

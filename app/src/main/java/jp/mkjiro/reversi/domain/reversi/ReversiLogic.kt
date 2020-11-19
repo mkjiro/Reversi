@@ -59,7 +59,7 @@ object ReversiLogic {
     }
 
     fun getWinnerName(board: Board, players: Array<Player>): String {
-        var voteArray = Array(players.size) { 0 }
+        val voteArray = Array(players.size) { 0 }
         board.cells.map {
             it.map { cell ->
                 players.forEachIndexed { index, player ->
