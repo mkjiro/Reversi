@@ -1,6 +1,8 @@
-package jp.mkjiro.reversi.data.reversi
+package jp.mkjiro.reversi.domain.reversi.player
 
-import jp.mkjiro.reversi.domain.reversi.ReversiLogic
+import jp.mkjiro.reversi.domain.reversi.*
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Piece
 
 class CPU(
     name: String,
@@ -12,7 +14,11 @@ class CPU(
         val coordinate = strategy.getChosen(playerManager, board)
         putPiece(coordinate, board)
         //ひっくり返す
-        ReversiLogic.getOverturnedPieces(coordinate, this, board)
+        ReversiLogic.getOverturnedPieces(
+            coordinate,
+            this,
+            board
+        )
             .map {
                 this.putPiece(it, board)
             }

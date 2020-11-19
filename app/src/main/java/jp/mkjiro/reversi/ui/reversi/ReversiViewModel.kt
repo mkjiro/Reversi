@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.PublishProcessor
 import jp.mkjiro.reversi.base.BaseViewModel
-import jp.mkjiro.reversi.data.reversi.Coordinate
-import jp.mkjiro.reversi.domain.reversi.ReversiRepository
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.usecase.reversi.ReversiRepository
 import jp.mkjiro.reversi.ui.livedata.EventLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,7 +55,10 @@ class ReversiViewModel @Inject constructor(
     }
 
     fun putPiece(position: Int) {
-        var coordinate = Coordinate(position / columns, position % columns)
+        var coordinate = Coordinate(
+            position / columns,
+            position % columns
+        )
         viewModelScope.launch(Dispatchers.Default) {
             reversi.putPiece(coordinate)
         }

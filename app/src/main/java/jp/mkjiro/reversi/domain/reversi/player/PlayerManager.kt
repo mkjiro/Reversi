@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.data.reversi
+package jp.mkjiro.reversi.domain.reversi.player
 
 class PlayerManager(var players: Array<Player>) {
     private var turnPlayerIndex = 0
@@ -10,7 +10,8 @@ class PlayerManager(var players: Array<Player>) {
     }
 
     fun copy(): PlayerManager {
-        val playerManager = PlayerManager(this.players)
+        val playerManager =
+            PlayerManager(this.players)
         playerManager.turnPlayerIndex = this.turnPlayerIndex
         return playerManager
     }

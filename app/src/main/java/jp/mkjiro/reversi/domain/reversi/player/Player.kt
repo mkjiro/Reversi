@@ -1,4 +1,8 @@
-package jp.mkjiro.reversi.data.reversi
+package jp.mkjiro.reversi.domain.reversi.player
+
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.domain.reversi.board.Piece
 
 abstract class Player(
     val name: String,
@@ -10,7 +14,8 @@ abstract class Player(
         board.cells[coordinate.y][coordinate.x].piece = piece
     }
 
-    protected var state = State.INIT
+    protected var state =
+        State.INIT
 
     protected enum class State {
         INIT,
@@ -19,6 +24,10 @@ abstract class Player(
         WAITING
     }
 
-    fun run() { state = State.RUNNING }
-    fun finish() { state = State.WAITING }
+    fun run() { state =
+        State.RUNNING
+    }
+    fun finish() { state =
+        State.WAITING
+    }
 }

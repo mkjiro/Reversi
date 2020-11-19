@@ -1,8 +1,14 @@
-package jp.mkjiro.reversi.domain.reversi
+package jp.mkjiro.reversi.usecase.reversi
 
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.subjects.BehaviorSubject
-import jp.mkjiro.reversi.data.reversi.*
+import jp.mkjiro.reversi.domain.reversi.*
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.CellColor
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.domain.reversi.player.CPU
+import jp.mkjiro.reversi.domain.reversi.player.Human
+import jp.mkjiro.reversi.domain.reversi.player.PlayerManager
 import kotlinx.coroutines.*
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext

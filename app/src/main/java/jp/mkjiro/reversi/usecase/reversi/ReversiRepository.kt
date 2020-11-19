@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.domain.reversi
+package jp.mkjiro.reversi.usecase.reversi
 
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.domain.reversi
+package jp.mkjiro.reversi.usecase.reversi
 
 import dagger.Binds
 import dagger.Module
