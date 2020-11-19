@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import jp.mkjiro.reversi.R
-import jp.mkjiro.reversi.data.reversi.Board
-import jp.mkjiro.reversi.data.reversi.CellColor
-import jp.mkjiro.reversi.data.reversi.PieceColor
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.CellColor
+import jp.mkjiro.reversi.domain.reversi.board.PieceColor
 import kotlinx.android.synthetic.main.cell.view.*
 
 class BoardRecyclerAdapter(

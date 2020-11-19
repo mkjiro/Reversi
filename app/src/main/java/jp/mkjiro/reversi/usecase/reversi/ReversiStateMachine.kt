@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.domain.reversi
+package jp.mkjiro.reversi.usecase.reversi
 
 abstract class ReversiStateMachine {
     protected lateinit var state: State

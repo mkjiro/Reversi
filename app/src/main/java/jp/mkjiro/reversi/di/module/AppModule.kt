@@ -6,8 +6,8 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import jp.mkjiro.reversi.App
 import jp.mkjiro.reversi.BuildConfig
-import jp.mkjiro.reversi.data.DataModule
 import jp.mkjiro.reversi.domain.DomainModule
+import jp.mkjiro.reversi.usecase.UseCaseModule
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -17,8 +17,8 @@ import dagger.android.AndroidInjectionModule
     includes = [
         AndroidInjectionModule::class,
         ViewModelModule::class,
+        UseCaseModule::class,
         DomainModule::class,
-        DataModule::class,
         ActivityModule::class
     ]
 )

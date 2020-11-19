@@ -1,6 +1,9 @@
 package jp.mkjiro.reversi.domain.reversi
 
-import jp.mkjiro.reversi.data.reversi.*
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.domain.reversi.board.PieceColor
+import jp.mkjiro.reversi.domain.reversi.player.Player
 import timber.log.Timber
 
 data class Direction(
@@ -17,8 +20,18 @@ object ReversiLogic {
         board.cells.mapIndexed { y, arrayOfPieces ->
             arrayOfPieces.mapIndexed { x, cell ->
                 if (cell.piece.color == PieceColor.NONE) {
-                    if (getOverturnedPieces(Coordinate(y, x), player, board).isNotEmpty())
-                        cells += Coordinate(y, x)
+                    if (getOverturnedPieces(
+                            Coordinate(
+                                y,
+                                x
+                            ),
+                            player,
+                            board
+                        ).isNotEmpty())
+                        cells += Coordinate(
+                            y,
+                            x
+                        )
                 }
             }
         }
@@ -34,7 +47,12 @@ object ReversiLogic {
         for (y in -1..1) {
             for (x in -1..1) {
                 if (y == 0 && x == 0)continue
-                cells += getOverturnedPiecesOnLine(Direction(y, x), newPos, player, board)
+                cells += getOverturnedPiecesOnLine(
+                    Direction(y, x),
+                    newPos,
+                    player,
+                    board
+                )
             }
         }
         return cells
@@ -83,11 +101,19 @@ object ReversiLogic {
         var cells = arrayOf<Coordinate>()
         var y = newPos.y + dir.y
         var x = newPos.x + dir.x
-        loop@ while (isRange(y, x, board)) {
+        loop@ while (isRange(
+                y,
+                x,
+                board
+            )
+        ) {
             when (board.cells[y][x].piece.color) {
                 player.piece.color -> break@loop
                 PieceColor.NONE -> return arrayOf()
-                else -> cells += Coordinate(y, x)
+                else -> cells += Coordinate(
+                    y,
+                    x
+                )
             }
             y += dir.y
             x += dir.x

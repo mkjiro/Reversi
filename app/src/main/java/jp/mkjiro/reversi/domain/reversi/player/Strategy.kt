@@ -1,5 +1,7 @@
-package jp.mkjiro.reversi.data.reversi
+package jp.mkjiro.reversi.domain.reversi.player
 
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
 import jp.mkjiro.reversi.domain.reversi.ReversiLogic
 import timber.log.Timber
 
@@ -10,7 +12,10 @@ interface Strategy {
 class RandomStrategy : Strategy {
     override fun getChosen(playerManager: PlayerManager, board: Board): Coordinate {
         val cells =
-                ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
+            ReversiLogic.getCellToPutPiece(
+                playerManager.turnPlayer,
+                board
+            )
         return cells.random()
     }
 }
@@ -31,7 +36,11 @@ class AlphaBetaStrategy : Strategy {
 
     private fun reversePiece(coordinate: Coordinate, playerManager: PlayerManager, board: Board) {
         playerManager.turnPlayer.putPiece(coordinate, board)
-        ReversiLogic.getOverturnedPieces(coordinate, playerManager.turnPlayer, board)
+        ReversiLogic.getOverturnedPieces(
+            coordinate,
+            playerManager.turnPlayer,
+            board
+        )
             .map {
                 playerManager.turnPlayer.putPiece(it, board)
             }
@@ -77,7 +86,11 @@ class AlphaBetaStrategy : Strategy {
             pm.alternateTurnPlayer()
             var (_, indexSum) = evalByAlphaBeta(cd, -maxBeta, -maxAlpha, pm, bd, depth - 1)
             indexSum += indexTable[cd.y][cd.x]
-            if (maxCoordinate == Coordinate(-1, -1))maxCoordinate = cd
+            if (maxCoordinate == Coordinate(
+                    -1,
+                    -1
+                )
+            )maxCoordinate = cd
             if (maxAlpha <= indexSum) {
                 maxAlpha = indexSum
                 maxCoordinate = cd
@@ -94,7 +107,11 @@ class AlphaBetaStrategy : Strategy {
         Timber.d("===turn start===")
         val pm = playerManager.copy()
         val bd = board.copy()
-        val (coordinate, evaluation) = evalByAlphaBeta(Coordinate(-1, -1), maxAlpha, maxBeta, pm, bd, MAX_DEPTH)
+        val (coordinate, evaluation) = evalByAlphaBeta(
+            Coordinate(
+                -1,
+                -1
+            ), maxAlpha, maxBeta, pm, bd, MAX_DEPTH)
         Timber.d("depth : $MAX_DEPTH eval : ${-evaluation}")
         Timber.d("chosen cd : $coordinate")
         Timber.d("===turn end===")
