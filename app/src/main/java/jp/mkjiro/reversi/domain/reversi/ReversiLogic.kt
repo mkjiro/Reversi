@@ -1,9 +1,9 @@
-package jp.mkjiro.reversi.reversi
+package jp.mkjiro.reversi.domain.reversi
 
-import jp.mkjiro.reversi.reversi.board.Board
-import jp.mkjiro.reversi.reversi.board.Coordinate
-import jp.mkjiro.reversi.reversi.board.PieceColor
-import jp.mkjiro.reversi.reversi.player.Player
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.domain.reversi.board.PieceColor
+import jp.mkjiro.reversi.domain.reversi.player.Player
 import timber.log.Timber
 
 data class Direction(

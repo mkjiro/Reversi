@@ -1,8 +1,8 @@
-package jp.mkjiro.reversi.reversi.player
+package jp.mkjiro.reversi.domain.reversi.player
 
-import jp.mkjiro.reversi.reversi.board.Board
-import jp.mkjiro.reversi.reversi.board.Coordinate
-import jp.mkjiro.reversi.reversi.board.Piece
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.domain.reversi.board.Piece
 
 abstract class Player(
     val name: String,

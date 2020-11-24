@@ -1,7 +1,7 @@
-package jp.mkjiro.reversi.reversi.player
+package jp.mkjiro.reversi.domain.reversi.player
 
-import jp.mkjiro.reversi.reversi.board.Board
-import jp.mkjiro.reversi.reversi.board.Piece
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Piece
 
 class Human(
     name: String,

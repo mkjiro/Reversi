@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.reversi.player
+package jp.mkjiro.reversi.domain.reversi.player
 
 class PlayerManager(var players: Array<Player>) {
     private var turnPlayerIndex = 0

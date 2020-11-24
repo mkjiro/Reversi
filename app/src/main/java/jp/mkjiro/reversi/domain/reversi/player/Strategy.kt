@@ -1,8 +1,8 @@
-package jp.mkjiro.reversi.reversi.player
+package jp.mkjiro.reversi.domain.reversi.player
 
-import jp.mkjiro.reversi.reversi.board.Board
-import jp.mkjiro.reversi.reversi.board.Coordinate
-import jp.mkjiro.reversi.reversi.ReversiLogic
+import jp.mkjiro.reversi.domain.reversi.board.Board
+import jp.mkjiro.reversi.domain.reversi.board.Coordinate
+import jp.mkjiro.reversi.domain.reversi.ReversiLogic
 import timber.log.Timber
 
 interface Strategy {
