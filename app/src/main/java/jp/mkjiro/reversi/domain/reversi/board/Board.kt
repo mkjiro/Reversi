@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.reversi.board
+package jp.mkjiro.reversi.domain.reversi.board
 
 class Board(
     val columns: Int = 8,

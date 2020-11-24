@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.reversi.board
+package jp.mkjiro.reversi.domain.reversi.board
 
 data class Piece(
     val color: PieceColor = PieceColor.NONE
