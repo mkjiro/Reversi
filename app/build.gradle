@@ -4,6 +4,33 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("${buildDir}/JacocoReports")
+}
+
+//run "./gradlew test jacocoTestReport" and then genarated report of coverage
+task jacocoTestReport(
+        type: JacocoReport,
+        dependsOn: "testFreeDebugUnitTest",
+        group: "verification"
+) {
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+        html.destination = file("${buildDir}/reports/jacoco/html")
+    }
+    afterEvaluate {
+        def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+        def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/freeDebug", excludes: fileFilter)
+        getSourceDirectories().from = "${projectDir}/src/main/java"
+        getExecutionData().from = "${buildDir}/jacoco/testFreeDebugUnitTest.exec"
+        getClassDirectories().from = files([debugTree])
+    }
+}
 
 def applicationName = "Reversi"
 
@@ -22,13 +49,6 @@ android {
 
         def localProperty = new Properties()
         localProperty.load(project.rootProject.file('local.properties').newDataInputStream())
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 
     signingConfigs {
@@ -64,6 +84,7 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
+            testCoverageEnabled = true
 //                proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         //./gradlew clean assembleRelease
@@ -113,21 +134,23 @@ android {
 
     // for junit5
     testOptions {
+        unitTests.includeAndroidResources = true
         unitTests.all {
             useJUnitPlatform()
+            jacoco {
+                includeNoLocationClasses = true
+            }
         }
     }
+
 }
 
 dependencies {
     implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     //test
-    testImplementation(platform("org.junit:junit-bom:$junit_version"))
-    testImplementation "org.junit.jupiter:junit-jupiter"
-    testImplementation "org.junit.jupiter:junit-jupiter-api"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
-
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     androidTestImplementation 'androidx.test:runner:1.2.0'
 
     //timber
@@ -184,3 +207,5 @@ dependencies {
     //RecyclerView
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
+
+

@@ -1,4 +1,4 @@
-package jp.mkjiro.reversi.domain.reversi.board
+package jp.mkjiro.reversi.reversi.board
 
 data class Coordinate(
     val y: Int = -1,
