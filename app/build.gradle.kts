@@ -1,8 +1,11 @@
-plugins{
+
+
+plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-android-extensions")
-    id("kotlin-kapt")
+//    kotlin("jvm")
+    kotlin("android")
+    kotlin("android.extensions")
+    kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("org.jlleitschuh.gradle.ktlint")
     id("jacoco")
@@ -10,31 +13,33 @@ plugins{
 
 jacoco {
     toolVersion = "0.8.5"
-    reportsDir = file("${buildDir}/JacocoReports")
+//    reportsDir = file("$buildDir/JacocoReports")
 }
 
 //run "./gradlew test jacocoTestReport" and then genarated report of coverage
-task jacocoTestReport(
-        type: JacocoReport,
-        dependsOn: "testFreeDebugUnitTest",
-        group: "verification"
-) {
+task("jacocoTestReport", JacocoReport::class) {
+    dependsOn("testFreeDebugUnitTest")
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports for the build. Only unit tests."
     reports {
-        xml.enabled true
-        html.enabled true
-        csv.enabled false
-        html.destination = file("${buildDir}/reports/jacoco/html")
+        xml.isEnabled = true
+        html.isEnabled = true
+        csv.isEnabled = false
+        xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        html.destination = file("$buildDir/reports/jacoco/html")
     }
     afterEvaluate {
-        def fileFilter = ["**/R.class", '**/R$*.class', "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*"]
-        def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/freeDebug", excludes: fileFilter)
-        getSourceDirectories().from = "${projectDir}/src/main/java"
-        getExecutionData().from = "${buildDir}/jacoco/testFreeDebugUnitTest.exec"
-        getClassDirectories().from = files([debugTree])
+        val fileFilter = setOf("**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*", "**/*Test*.*", "android/**/*.*")
+        val debugTree = fileTree("$buildDir/tmp/kotlin-classes/freeDebug") {
+            setExcludes(fileFilter)
+        }
+        sourceDirectories.setFrom("$projectDir/src/main/java")
+        executionData.setFrom("$buildDir/jacoco/testFreeDebugUnitTest.exec")
+        classDirectories.setFrom(debugTree)
     }
 }
 
-def applicationName = "Reversi"
+val applicationName = "Reversi"
 
 android {
     compileSdkVersion(30)
@@ -49,8 +54,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        def localProperty = new Properties()
-        localProperty.load(project.rootProject.file("local.properties").newDataInputStream())
+//        val localProperty = property()
+//        localProperty.load(project.rootProject.file("local.properties"))
     }
 
     signingConfigs {
@@ -70,29 +75,29 @@ android {
 //        }
     }
 
-    flavorDimensions "Templete"
+    flavorDimensions("Templete")
 
     productFlavors {
-        free {
+        create("free") {
             dimension = "Templete"
 //            signingConfig signingConfigs.free
         }
-        paid {
+        create("paid") {
             dimension = "Templete"
 //            signingConfig signingConfigs.paid
         }
     }
 
     buildTypes {
-        debug {
-            minifyEnabled = false
-            testCoverageEnabled = true
+        getByName("debug") {
+            minifyEnabled(false)
+            isTestCoverageEnabled = true
 //                proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
         //./gradlew clean assembleRelease
-        release {
+        getByName("release") {
             signingConfig = null
-            minifyEnabled = false
+            minifyEnabled(false)
 //                proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
@@ -102,8 +107,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
@@ -114,20 +119,22 @@ android {
         exclude("META-INF/DEPENDENCIES")
     }
 
-    applicationVariants.all { variant ->
+    applicationVariants.all {
         //./gradlew clean assembleRelease build staging and production at same time
-        variant.outputs.all { output ->
-            def newApkName = "${applicationName}_${versionName}.apk"
-
-            outputFileName = new File(newApkName)
-        }
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val newApkName = "${applicationName}_${defaultConfig.versionCode}.apk"
+                output.outputFileName = newApkName
+            }
     }
 
     ktlint {
-        version = "0.22.0"
-        debug = true
-        android = true
-        ignoreFailures = true
+        version.set("0.22.0")
+        debug.set(true)
+        android.set(true)
+        ignoreFailures.set(true)
     }
 
     tasks.preBuild {
@@ -136,20 +143,19 @@ android {
 
     // for junit5
     testOptions {
-        unitTests.includeAndroidResources = true
+        unitTests.isIncludeAndroidResources = true
         unitTests.all {
-            useJUnitPlatform()
+            it.useJUnitPlatform()
             jacoco {
-                includeNoLocationClasses = true
+//                includeNoLocationClasses = true
             }
         }
     }
-
 }
 
 dependencies {
     implementation("androidx.gridlayout:gridlayout:1.0.0")
-
+//
     //test
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
@@ -159,7 +165,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:4.7.1")
 
     //kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version")
+    implementation(kotlin("stdlib-jdk7:${rootProject.extra["kotlin_version"]}"))
 
     //android design
     implementation("androidx.appcompat:appcompat:1.1.0")
@@ -180,11 +186,11 @@ dependencies {
     implementation("com.github.tbruyelle:rxpermissions:0.10.2")
 
     //dagger
-    implementation("com.google.dagger:dagger:$dagger_version")
-    kapt("com.google.dagger:dagger-compiler:$dagger_version")
-    implementation("com.google.dagger:dagger-android:$dagger_version")
-    implementation("com.google.dagger:dagger-android-support:$dagger_version")
-    kapt("com.google.dagger:dagger-android-processor:$dagger_version")
+    implementation("com.google.dagger:dagger:${rootProject.extra["dagger_version"]}")
+    kapt("com.google.dagger:dagger-compiler:${rootProject.extra["dagger_version"]}")
+    implementation("com.google.dagger:dagger-android:${rootProject.extra["dagger_version"]}")
+    implementation("com.google.dagger:dagger-android-support:${rootProject.extra["dagger_version"]}")
+    kapt("com.google.dagger:dagger-android-processor:${rootProject.extra["dagger_version"]}")
 
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
@@ -192,8 +198,8 @@ dependencies {
     kapt("androidx.lifecycle:lifecycle-compiler:2.2.0")
 
     //navigation
-    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
-    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-ui-ktx:${rootProject.extra["navigation_version"]}")
+    implementation("androidx.navigation:navigation-fragment-ktx:${rootProject.extra["navigation_version"]}")
 
     //okHttp
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
@@ -209,5 +215,3 @@ dependencies {
     //recyclerView
     implementation("androidx.recyclerview:recyclerview:1.1.0")
 }
-
-
