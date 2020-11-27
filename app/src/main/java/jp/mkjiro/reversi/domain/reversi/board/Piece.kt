@@ -1,11 +1,10 @@
 package jp.mkjiro.reversi.domain.reversi.board
 
 data class Piece(
-    val color: PieceColor = PieceColor.NONE
+    val color: PieceColor
 )
 
 enum class PieceColor {
-    NONE,
     BLACK,
     WHITE
 }

@@ -2,7 +2,6 @@ package jp.mkjiro.reversi.domain.reversi
 
 import jp.mkjiro.reversi.domain.reversi.board.Board
 import jp.mkjiro.reversi.domain.reversi.board.Coordinate
-import jp.mkjiro.reversi.domain.reversi.board.PieceColor
 import jp.mkjiro.reversi.domain.reversi.player.Player
 import timber.log.Timber
 
@@ -19,7 +18,7 @@ object ReversiLogic {
         var cells = arrayOf<Coordinate>()
         board.cells.mapIndexed { y, arrayOfPieces ->
             arrayOfPieces.mapIndexed { x, cell ->
-                if (cell.piece.color == PieceColor.NONE) {
+                cell.piece ?: run {
                     if (getOverturnedPieces(
                             Coordinate(
                                 y,
@@ -107,13 +106,14 @@ object ReversiLogic {
                 board
             )
         ) {
-            when (board.cells[y][x].piece.color) {
-                player.piece.color -> break@loop
-                PieceColor.NONE -> return arrayOf()
-                else -> cells += Coordinate(
-                    y,
-                    x
-                )
+            if (board.cells[y][x].piece != null) {
+                if (board.cells[y][x].piece!!.color == player.piece.color) {
+                    break
+                } else {
+                    cells += Coordinate(y, x)
+                }
+            } else {
+                return arrayOf()
             }
             y += dir.y
             x += dir.x
