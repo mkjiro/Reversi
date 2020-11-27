@@ -1,14 +1,14 @@
 package jp.mkjiro.reversi.domain.reversi.board
 
 class Board(
-    val columns: Int = 8,
-    val rows: Int = 8
+    private val columns: Int = 8,
+    private val rows: Int = 8
 ) {
     var cells: Array<Array<Cell>> = Array(rows) {
         Array(columns) {
             Cell(
                 CellColor.GREEN,
-                Piece(PieceColor.NONE)
+                null
             )
         }
     }
@@ -42,8 +42,8 @@ class Board(
 
     fun resetCellColor() {
         cells.forEach {
-            it.forEach {
-                it.color = CellColor.GREEN
+            it.forEach { cell ->
+                cell.color = CellColor.GREEN
             }
         }
     }

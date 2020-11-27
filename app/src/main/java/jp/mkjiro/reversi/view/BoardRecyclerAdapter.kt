@@ -49,20 +49,23 @@ class BoardRecyclerAdapter(
 
 //        holder.cell.text = "$row : $col"
 
-        holder.piece.setOnClickListener {
+        holder.cell.setOnClickListener {
             listener.onItemClickListener(it, position, board.cells[row][col].toString())
         }
         //        holder.text.text = board.cells[row][col].toString()
-        holder.piece.background = when (board.cells[row][col].piece.color) {
-            PieceColor.WHITE -> ResourcesCompat.getDrawable(resources, white, null)
-            PieceColor.BLACK -> ResourcesCompat.getDrawable(resources, black, null)
-            else -> null
+        board.cells[row][col].piece?.let {
+            holder.piece.visibility = View.VISIBLE
+            holder.piece.background = when (board.cells[row][col].piece!!.color) {
+                PieceColor.WHITE -> ResourcesCompat.getDrawable(resources, white, null)
+                PieceColor.BLACK -> ResourcesCompat.getDrawable(resources, black, null)
+            }
+        } ?: run {
+            holder.piece.visibility = View.GONE
         }
 
         holder.cell.background = when (board.cells[row][col].color) {
             CellColor.GREEN -> ResourcesCompat.getDrawable(resources, cellColorGreen, null)
             CellColor.RED -> ResourcesCompat.getDrawable(resources, cellColorRed, null)
-            else -> null
         }
     }
 
