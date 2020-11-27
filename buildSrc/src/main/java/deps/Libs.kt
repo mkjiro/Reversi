@@ -4,7 +4,7 @@ object Libs{
     object GradlePlugin{
         const val android = "com.android.tools.build:gradle:4.1.0"
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72"
-        const val safeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:2.2.2"
+        const val safeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.1"
         const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:9.4.1"
     }
 

@@ -6,7 +6,7 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("androidx.navigation.safeargs.kotlin")
+//    id("androidx.navigation.safeargs.kotlin")
     id("org.jlleitschuh.gradle.ktlint")
     id("jacoco")
 }
@@ -125,7 +125,7 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val newApkName = "${applicationName}_${defaultConfig.versionCode}.apk"
+                val newApkName = "${applicationName}_${defaultConfig.versionName}.apk"
                 output.outputFileName = newApkName
             }
     }
