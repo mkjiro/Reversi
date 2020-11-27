@@ -1,4 +1,4 @@
-
+import deps.Libs
 
 plugins {
     id("com.android.application")
@@ -154,24 +154,24 @@ android {
 }
 
 dependencies {
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
-//
+    implementation(deps.Libs.AndroidX.gridLayout)
+
     //test
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-    androidTestImplementation("androidx.test:runner:1.2.0")
+    testImplementation(deps.Libs.Test.junitAPI)
+    testRuntimeOnly(deps.Libs.Test.junitEngine)
+    androidTestImplementation(deps.Libs.Test.testRunner)
 
     //timber
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation(deps.Libs.Timber.client)
 
     //kotlin
-    implementation(kotlin("stdlib-jdk7:${rootProject.extra["kotlin_version"]}"))
+    implementation(deps.Libs.Kotlin.stdlibJvm)
 
     //android design
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("androidx.recyclerview:recyclerview:1.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
-    implementation("androidx.constraintlayout:constraintlayout-solver:1.1.3")
+    implementation(deps.Libs.AndroidX.appCompat)
+    implementation(deps.Libs.AndroidX.recyclerView)
+    implementation(deps.Libs.AndroidX.constraint)
+    implementation(deps.Libs.AndroidX.constraintSolver)
 
     //firebase
 //    implementation "com.google.firebase:firebase-core:17.3.0"
@@ -182,36 +182,35 @@ dependencies {
 //    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     //rxjava2
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
-    implementation("com.github.tbruyelle:rxpermissions:0.10.2")
+    implementation(deps.Libs.RxJava.client)
+//    implementation("com.github.tbruyelle:rxpermissions:0.10.2")
 
     //dagger
-    implementation("com.google.dagger:dagger:${rootProject.extra["dagger_version"]}")
-    kapt("com.google.dagger:dagger-compiler:${rootProject.extra["dagger_version"]}")
-    implementation("com.google.dagger:dagger-android:${rootProject.extra["dagger_version"]}")
-    implementation("com.google.dagger:dagger-android-support:${rootProject.extra["dagger_version"]}")
-    kapt("com.google.dagger:dagger-android-processor:${rootProject.extra["dagger_version"]}")
+    implementation(deps.Libs.Dagger.client)
+    kapt(deps.Libs.Dagger.compiler)
+    implementation(deps.Libs.Dagger.android)
+    implementation(deps.Libs.Dagger.support)
+    kapt(deps.Libs.Dagger.processor)
 
     //lifecycle
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    //noinspection LifecycleAnnotationProcessorWithJava8
-    kapt("androidx.lifecycle:lifecycle-compiler:2.2.0")
+    implementation(deps.Libs.AndroidX.lifecycleExtensions)
+    kapt(deps.Libs.AndroidX.lifecycleCompiler)
 
     //navigation
-    implementation("androidx.navigation:navigation-ui-ktx:${rootProject.extra["navigation_version"]}")
-    implementation("androidx.navigation:navigation-fragment-ktx:${rootProject.extra["navigation_version"]}")
+    implementation(deps.Libs.AndroidX.Navigation.uiKtx)
+    implementation(deps.Libs.AndroidX.Navigation.fragmentKtx)
 
     //okHttp
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation(deps.Libs.OkHttp.client)
 
     //retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.3.0")
+    implementation(deps.Libs.Retrofit.client)
+    implementation(deps.Libs.Retrofit.gson)
+    implementation(deps.Libs.Retrofit.rxjava)
 
     //gson
-    implementation("com.google.code.gson:gson:2.8.6")
+    implementation(deps.Libs.Gson.client)
 
     //recyclerView
-    implementation("androidx.recyclerview:recyclerview:1.1.0")
+    implementation(deps.Libs.AndroidX.recyclerView)
 }
