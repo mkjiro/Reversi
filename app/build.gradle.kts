@@ -154,24 +154,24 @@ android {
 }
 
 dependencies {
-    implementation(deps.Libs.AndroidX.gridLayout)
+    implementation(Libs.AndroidX.gridLayout)
 
     //test
-    testImplementation(deps.Libs.Test.junitAPI)
-    testRuntimeOnly(deps.Libs.Test.junitEngine)
-    androidTestImplementation(deps.Libs.Test.testRunner)
+    testImplementation(Libs.Test.junitAPI)
+    testRuntimeOnly(Libs.Test.junitEngine)
+    androidTestImplementation(Libs.Test.testRunner)
 
     //timber
-    implementation(deps.Libs.Timber.client)
+    implementation(Libs.Timber.client)
 
     //kotlin
-    implementation(deps.Libs.Kotlin.stdlibJvm)
+    implementation(Libs.Kotlin.stdlibJvm)
 
     //android design
-    implementation(deps.Libs.AndroidX.appCompat)
-    implementation(deps.Libs.AndroidX.recyclerView)
-    implementation(deps.Libs.AndroidX.constraint)
-    implementation(deps.Libs.AndroidX.constraintSolver)
+    implementation(Libs.AndroidX.appCompat)
+    implementation(Libs.AndroidX.recyclerView)
+    implementation(Libs.AndroidX.constraint)
+    implementation(Libs.AndroidX.constraintSolver)
 
     //firebase
 //    implementation "com.google.firebase:firebase-core:17.3.0"
@@ -182,35 +182,35 @@ dependencies {
 //    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
 
     //rxjava2
-    implementation(deps.Libs.RxJava.client)
+    implementation(Libs.RxJava.client)
 //    implementation("com.github.tbruyelle:rxpermissions:0.10.2")
 
     //dagger
-    implementation(deps.Libs.Dagger.client)
-    kapt(deps.Libs.Dagger.compiler)
-    implementation(deps.Libs.Dagger.android)
-    implementation(deps.Libs.Dagger.support)
-    kapt(deps.Libs.Dagger.processor)
+    implementation(Libs.Dagger.client)
+    kapt(Libs.Dagger.compiler)
+    implementation(Libs.Dagger.android)
+    implementation(Libs.Dagger.support)
+    kapt(Libs.Dagger.processor)
 
     //lifecycle
-    implementation(deps.Libs.AndroidX.lifecycleExtensions)
-    kapt(deps.Libs.AndroidX.lifecycleCompiler)
+    implementation(Libs.AndroidX.lifecycleExtensions)
+    kapt(Libs.AndroidX.lifecycleCompiler)
 
     //navigation
-    implementation(deps.Libs.AndroidX.Navigation.uiKtx)
-    implementation(deps.Libs.AndroidX.Navigation.fragmentKtx)
+    implementation(Libs.AndroidX.Navigation.uiKtx)
+    implementation(Libs.AndroidX.Navigation.fragmentKtx)
 
     //okHttp
-    implementation(deps.Libs.OkHttp.client)
+    implementation(Libs.OkHttp.client)
 
     //retrofit
-    implementation(deps.Libs.Retrofit.client)
-    implementation(deps.Libs.Retrofit.gson)
-    implementation(deps.Libs.Retrofit.rxjava)
+    implementation(Libs.Retrofit.client)
+    implementation(Libs.Retrofit.gson)
+    implementation(Libs.Retrofit.rxjava)
 
     //gson
-    implementation(deps.Libs.Gson.client)
+    implementation(Libs.Gson.client)
 
     //recyclerView
-    implementation(deps.Libs.AndroidX.recyclerView)
+    implementation(Libs.AndroidX.recyclerView)
 }
