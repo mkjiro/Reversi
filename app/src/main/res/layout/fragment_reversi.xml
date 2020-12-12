@@ -31,6 +31,8 @@
 
         </LinearLayout>
 
+        <include layout="@layout/game_info" android:id="@+id/include_views_1" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/boardRecyclerView"
             android:layout_width="match_parent"
