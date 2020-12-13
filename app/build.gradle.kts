@@ -2,7 +2,7 @@ import deps.Libs
 
 plugins {
     id("com.android.application")
-//    kotlin("jvm")
+//    kotlin("jvm") version "1.4.0"
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
@@ -213,4 +213,7 @@ dependencies {
 
     //recyclerView
     implementation(Libs.AndroidX.recyclerView)
+
+    //coroutines
+//    implementation(Libs.Coroutines.core)
 }

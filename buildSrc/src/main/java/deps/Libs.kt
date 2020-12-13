@@ -64,4 +64,7 @@ object Libs{
         const val client = "com.google.code.gson:gson:2.8.6"
     }
 
+    object Coroutines {
+        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2"
+    }
 }

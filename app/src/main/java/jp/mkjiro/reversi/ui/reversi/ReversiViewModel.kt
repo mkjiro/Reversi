@@ -1,13 +1,16 @@
 package jp.mkjiro.reversi.ui.reversi
 
 import androidx.lifecycle.viewModelScope
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.processors.PublishProcessor
 import jp.mkjiro.reversi.base.BaseViewModel
 import jp.mkjiro.reversi.domain.reversi.board.Coordinate
 import jp.mkjiro.reversi.usecase.reversi.ReversiRepository
 import jp.mkjiro.reversi.ui.livedata.EventLiveData
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,34 +27,34 @@ class ReversiViewModel @Inject constructor(
     val columns: Int
         get() = reversi.getBoard().cells[0].size
 
-    val turnPlayerName: PublishProcessor<String> by lazy {
-        PublishProcessor.create<String>()
-    }
+    private val _turnPlayerName = Channel<String>(capacity = UNLIMITED)
+    val turnPlayerName = _turnPlayerName.consumeAsFlow()
 
-    val winnerPlayerName: PublishProcessor<String> by lazy {
-        PublishProcessor.create<String>()
-    }
+    private val _winnerPlayerName = Channel<String>(capacity = UNLIMITED)
+    val winnerPlayerName = _winnerPlayerName.consumeAsFlow()
 
-    override fun onStartWithDisposables(disposables: CompositeDisposable) {
-        super.onStartWithDisposables(disposables)
-        reversi.getTurnPlayerName().subscribe {
+    fun setup() {
+        reversi.turnPlayerName.map {
             val shownName = "$it's Turn"
-            turnPlayerName.onNext(shownName)
-        }.let(disposables::add)
+            viewModelScope.launch {
+                _turnPlayerName.send(shownName)
+            }
+        }.launchIn(viewModelScope)
 
-        reversi.getWinnerName().subscribe {
+        reversi.winnerPlayerName.map {
             val showName = "$it is Winner !!!"
-            winnerPlayerName.onNext(showName)
-        }.let(disposables::add)
+            viewModelScope.launch {
+                _winnerPlayerName.send(showName)
+            }
+        }.launchIn(viewModelScope)
 
         viewModelScope.launch(Dispatchers.Default) {
             reversi.start()
         }
     }
 
-    override fun onStop() {
+    fun finish() {
         reversi.finish()
-        super.onStop()
     }
 
     fun putPiece(position: Int) {

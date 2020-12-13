@@ -1,7 +1,5 @@
 package jp.mkjiro.reversi.usecase.reversi
 
-import io.reactivex.processors.PublishProcessor
-import io.reactivex.subjects.BehaviorSubject
 import jp.mkjiro.reversi.domain.reversi.*
 import jp.mkjiro.reversi.domain.reversi.board.Board
 import jp.mkjiro.reversi.domain.reversi.board.CellColor
@@ -10,6 +8,9 @@ import jp.mkjiro.reversi.domain.reversi.player.CPU
 import jp.mkjiro.reversi.domain.reversi.player.Human
 import jp.mkjiro.reversi.domain.reversi.player.PlayerManager
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.Channel.Factory.UNLIMITED
+import kotlinx.coroutines.flow.consumeAsFlow
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
@@ -22,19 +23,20 @@ class Reversi(
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Default
 
-    private val playerName: BehaviorSubject<String> by lazy {
-        BehaviorSubject.create<String>()
-    }
-    private val winnerPlayerName: PublishProcessor<String> by lazy {
-        PublishProcessor.create<String>()
-    }
+    private val _turnPlayerName = Channel<String>(capacity = UNLIMITED)
+    val turnPlayerName = _turnPlayerName.consumeAsFlow()
+
+    private val _winnerPlayerName = Channel<String>(capacity = UNLIMITED)
+    val winnerPlayerName = _winnerPlayerName.consumeAsFlow()
+
     private var cellsToPutPiece: Array<Coordinate> = arrayOf()
 
     init {
         setFirstState()
     }
 
-    fun start() {
+    suspend fun start() {
+        _turnPlayerName.send(playerManager.turnPlayer.name)
         emitEvent(Event.START)
     }
 
@@ -102,7 +104,9 @@ class Reversi(
         } else {
             cellsToPutPiece = cells
             paintCellsToPuPiece(cells)
-            playerName.onNext(playerManager.turnPlayer.name)
+            launch {
+                _turnPlayerName.send(playerManager.turnPlayer.name)
+            }
             emitEvent(Event.CONTINUE)
         }
     }
@@ -112,14 +116,18 @@ class Reversi(
         playerManager.alternateTurnPlayer()
         val cells = ReversiLogic.getCellToPutPiece(playerManager.turnPlayer, board)
         if (cells.isEmpty()) {
-            winnerPlayerName.onNext(
-                ReversiLogic.getWinnerName(board, playerManager.players)
-            )
+            launch {
+                _winnerPlayerName.send(
+                    ReversiLogic.getWinnerName(board, playerManager.players)
+                )
+            }
             emitEvent(Event.NOT_PUT)
         } else {
             cellsToPutPiece = cells
             paintCellsToPuPiece(cells)
-            playerName.onNext(playerManager.turnPlayer.name)
+            launch {
+                _turnPlayerName.send(playerManager.turnPlayer.name)
+            }
             emitEvent(Event.CONTINUE)
         }
     }
@@ -130,14 +138,6 @@ class Reversi(
                 board.paintCell(it, CellColor.RED)
             }
         }
-    }
-
-    fun getTurnPlayerName(): BehaviorSubject<String> {
-        return playerName
-    }
-
-    fun getWinnerName(): PublishProcessor<String> {
-        return winnerPlayerName
     }
 
     fun getBoard(): Board {
