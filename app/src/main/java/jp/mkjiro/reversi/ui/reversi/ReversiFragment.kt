@@ -4,22 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import jp.mkjiro.reversi.R
 import jp.mkjiro.reversi.base.BaseFragment
 import jp.mkjiro.reversi.databinding.FragmentReversiBinding
 import jp.mkjiro.reversi.view.BoardRecyclerAdapter
 import kotlinx.android.synthetic.main.cell.view.*
 import kotlinx.android.synthetic.main.fragment_reversi.*
+import kotlinx.coroutines.flow.collect
 
 class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
 
     private lateinit var binding: FragmentReversiBinding
-
-    private val startDisposables = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +42,7 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
         //インターフェースの実装
         adapter.setOnItemClickListener(object : BoardRecyclerAdapter.OnItemClickListener {
             override fun onItemClickListener(view: View, position: Int, clickedText: String) {
-//                view.piece_textView.background = ResourcesCompat.getDrawable(resources,R.drawable.piece_black_style,null)
                 viewModel.putPiece(position)
-//                adapter.notifyDataSetChanged()
             }
         })
 
@@ -54,26 +50,24 @@ class ReversiFragment : BaseFragment<ReversiEvents, ReversiViewModel>() {
             viewModel.liveEvent.emitEvent(ReversiEvents.ToHome)
         }
 
-        viewModel.turnPlayerName
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+        lifecycleScope.launchWhenStarted {
+            viewModel.turnPlayerName.collect {
                 turnPlayerName_text.text = it
                 adapter.notifyDataSetChanged()
-            }.let(startDisposables::add)
+            }
 
-        viewModel.winnerPlayerName
-            .onBackpressureLatest()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            viewModel.winnerPlayerName.collect {
                 turnPlayerName_text.text = it
                 adapter.notifyDataSetChanged()
-            }.let(startDisposables::add)
+            }
+        }
+
+        viewModel.setup()
     }
 
-    override fun onPause() {
-        startDisposables.clear()
-        super.onPause()
+    override fun onStop() {
+        viewModel.finish()
+        super.onStop()
     }
 
     override fun onLiveEventReceive(event: ReversiEvents) {
