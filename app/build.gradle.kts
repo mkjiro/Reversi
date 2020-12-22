@@ -137,9 +137,9 @@ android {
         ignoreFailures.set(true)
     }
 
-    tasks.preBuild {
-        dependsOn(tasks.ktlintFormat)
-    }
+//    tasks.preBuild {
+//        dependsOn(tasks.ktlintFormat)
+//    }
 
     // for junit5
     testOptions {
