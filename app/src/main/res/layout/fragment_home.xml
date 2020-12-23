@@ -5,53 +5,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/title_text_view"
+        android:layout_width="357dp"
+        android:layout_height="166dp"
+        android:shadowColor="@color/colorCell"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="3"
+        android:text="Reversi"
+        android:textSize="100dp"
+        app:layout_constraintBottom_toTopOf="@+id/move_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:id="@+id/move_layout"
-        android:layout_width="232dp"
-        android:layout_height="97dp"
-        android:layout_marginTop="196dp"
-        android:orientation="horizontal"
+        android:layout_width="313dp"
+        android:layout_height="360dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.672">
 
         <Button
             android:id="@+id/move_next_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next_button"
+            android:layout_gravity="center"
+            android:text="@string/play_button"
+            android:textSize="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/stop_layout"
-        android:layout_width="238dp"
-        android:layout_height="125dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.514"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/move_layout"
-        app:layout_constraintVertical_bias="0.086">
 
         <Button
             android:id="@+id/stop_multiple_action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/none_button"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="@string/finish_button"
+            android:textSize="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

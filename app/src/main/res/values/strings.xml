@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Reversi</string>
-    <string name="next_button">Move Next Page</string>
-    <string name="none_button">None</string>
+    <string name="play_button">Play</string>
+    <string name="finish_button">Finish</string>
 </resources>
